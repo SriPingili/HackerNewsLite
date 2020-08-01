@@ -1,6 +1,7 @@
 package com.androideveloper.thenewsapp.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AbsListView
 import android.widget.Toast
@@ -12,6 +13,7 @@ import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Resource
+import com.androideveloper.thenewsapp.adapter.HackerFeedAdapter
 import kotlinx.android.synthetic.main.fragment_job_news.*
 import kotlinx.android.synthetic.main.fragment_latest_news.*
 import kotlinx.android.synthetic.main.fragment_top_news.paginationProgressBar
@@ -19,8 +21,8 @@ import kotlinx.android.synthetic.main.fragment_top_news.paginationProgressBar
 
 class JobNewsFragment : Fragment(R.layout.fragment_job_news) {
     lateinit var viewModel: HackerFeedViewModel
-//    lateinit var newsAdapter: NewsAdapter
-    val TAG = "BreakingNewsFragment"
+    lateinit var jobNewsHackerFeedAdapter: HackerFeedAdapter
+    val TAG = "JobNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,7 +54,11 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news) {
                     is Resource.Error -> {
                         hideProgressBar()
                         resourceResponse.message?.let { message ->
-                            Toast.makeText(activity, "An error occured: $message", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                activity,
+                                "An error occured: $message",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     }
 
@@ -62,7 +68,30 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news) {
                 }
 
             })
+
+        viewModel.jobStoryLiveData.observe(viewLifecycleOwner, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+//                    hideProgressBar()
+                    resourceResponse.data?.let {
+                        jobNewsHackerFeedAdapter.differ.submitList(it.toList())
+                    }
+                }
+
+                is Resource.Error -> {
+//                    hideProgressBar()
+                    resourceResponse.message?.let { message ->
+                        Log.v("zzzz", " error = $message")
+                    }
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
     }
+
 
     private fun hideProgressBar() {
         paginationProgressBar.visibility = View.INVISIBLE
@@ -73,14 +102,14 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news) {
     }
 
     fun setUpRecyclerView() {
-//        newsAdapter = NewsAdapter()
+        jobNewsHackerFeedAdapter = HackerFeedAdapter()
         rvJobNews.apply {
-//            adapter = newsAdapter
+            adapter = jobNewsHackerFeedAdapter
             layoutManager = LinearLayoutManager(activity)
 
         }
     }
-
-
-
 }
+
+
+

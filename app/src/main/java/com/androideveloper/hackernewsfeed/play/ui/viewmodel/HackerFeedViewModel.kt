@@ -28,6 +28,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     init {
         getTopStores()
         getNewStories()
+        getJobStories()
 
     }
 

@@ -88,7 +88,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news) {
                     }
                 }
                 is Resource.Loading -> {
-
+                    showProgressBar()
                 }
             }
         })
