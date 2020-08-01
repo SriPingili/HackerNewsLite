@@ -7,5 +7,11 @@ class HackerFeedRepository() {
     suspend fun getTopStories() =
         RetrofitInstance.api.getTopStories()
 
-    suspend fun fetchStoryById(id:Int) = RetrofitInstance.api.getStoryById(id)
+    suspend fun getNewStories() =
+        RetrofitInstance.api.getNewStories()
+
+    suspend fun getJobStories() =
+        RetrofitInstance.api.getJobStories()
+
+    suspend fun fetchStoryById(id: Int) = RetrofitInstance.api.getStoryById(id)
 }

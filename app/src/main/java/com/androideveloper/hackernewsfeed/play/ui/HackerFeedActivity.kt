@@ -3,7 +3,6 @@ package com.androideveloper.hackernewsfeed.play.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.androideveloper.hackernewsfeed.play.R
@@ -49,13 +48,110 @@ class HackerFeedActivity : AppCompatActivity() {
 
         })
 
-        viewModel.hackerStoryLiveData.observe(this, Observer { resourceResponse ->
+        viewModel.topStoryLiveData.observe(this, Observer { resourceResponse ->
             when (resourceResponse) {
 
                 is Resource.Success -> {
 //                    hideProgressBar()
                     resourceResponse.data?.let {
-                        Log.v("zzzz", " size is " + it.title)
+                        if(!it.type.equals("story")) {
+                            Log.v("zzzz", " size is " + it.type)
+                        }
+                    }
+                }
+
+                is Resource.Error -> {
+//                    hideProgressBar()
+                    resourceResponse.message?.let { message ->
+                        Log.v("zzzz", " error = $message")
+                    }
+                }
+                is Resource.Loading -> {
+//                    showProgressBar()
+                }
+            }
+        })
+
+
+        viewModel.newStoriesLiveData.observe(this, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+//                    hideProgressBar()
+                    resourceResponse.data?.let {
+                        Log.v("zzzz", " size is " + it.size)
+                    }
+                }
+
+                is Resource.Error -> {
+//                    hideProgressBar()
+                    resourceResponse.message?.let { message ->
+                        Log.v("zzzz", " error = $message")
+                    }
+                }
+                is Resource.Loading -> {
+//                    showProgressBar()
+                }
+            }
+
+        })
+
+        viewModel.newStoryLiveData.observe(this, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+//                    hideProgressBar()
+                    resourceResponse.data?.let {
+                        if(it.type.equals("story")) {
+                            Log.v("zzzz", " size is " + it.type)
+                        }
+                    }
+                }
+
+                is Resource.Error -> {
+//                    hideProgressBar()
+                    resourceResponse.message?.let { message ->
+                        Log.v("zzzz", " error = $message")
+                    }
+                }
+                is Resource.Loading -> {
+//                    showProgressBar()
+                }
+            }
+        })
+
+        viewModel.jobStoriesLiveData.observe(this, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+//                    hideProgressBar()
+                    resourceResponse.data?.let {
+                        Log.v("zzzz", " size is " + it.size)
+                    }
+                }
+
+                is Resource.Error -> {
+//                    hideProgressBar()
+                    resourceResponse.message?.let { message ->
+                        Log.v("zzzz", " error = $message")
+                    }
+                }
+                is Resource.Loading -> {
+//                    showProgressBar()
+                }
+            }
+
+        })
+
+        viewModel.jobStoryLiveData.observe(this, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+//                    hideProgressBar()
+                    resourceResponse.data?.let {
+                        if(!it.type.equals("story")) {
+                            Log.v("zzzz", " size is " + it.type)
+                        }
                     }
                 }
 
