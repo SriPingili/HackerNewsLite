@@ -71,7 +71,7 @@
 
     <TextView
         android:id="@+id/commentsCountTextViewId"
-        android:layout_width="0dp"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginStart="10dp"
@@ -85,9 +85,7 @@
         android:id="@+id/createdAtTextViewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintBaseline_toBaselineOf="@+id/titleTextViewId"
         app:layout_constraintRight_toRightOf="parent"
         tools:text="Yesterday" />
