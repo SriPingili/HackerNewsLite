@@ -17,12 +17,17 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     val newStoriesLiveData: MutableLiveData<Resource<List<Int>>> = MutableLiveData();
     val jobStoriesLiveData: MutableLiveData<Resource<List<Int>>> = MutableLiveData();
 
-    val topStoryLiveData: MutableLiveData<Resource<HackerStory>> = MutableLiveData();
-    val newStoryLiveData: MutableLiveData<Resource<HackerStory>> = MutableLiveData();
-    val jobStoryLiveData: MutableLiveData<Resource<HackerStory>> = MutableLiveData();
+    val topStoryLiveData: MutableLiveData<Resource<List<HackerStory>>> = MutableLiveData();
+    val newStoryLiveData: MutableLiveData<Resource<List<HackerStory>>> = MutableLiveData();
+    val jobStoryLiveData: MutableLiveData<Resource<List<HackerStory>>> = MutableLiveData();
+
+    val topStoryResponse = ArrayList<HackerStory>()
+    val newStoryResponse = ArrayList<HackerStory>()
+    val jobStoryResponse = ArrayList<HackerStory>()
 
     init {
-        getJobStories()
+        getTopStores()
+        getNewStories()
 
     }
 
@@ -36,11 +41,11 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleTopStoriesResponse(response: Response<List<Int>>): Resource<List<Int>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
-                val time = measureTimeMillis {
-                    for (id in hackerFeedResponse.take(200)){
-                        fetchStoryBydId(id)
-                    }
+
+                for (id in hackerFeedResponse.take(200)) {
+                    fetchStoryBydId(id)
                 }
+
 
                 return Resource.Success(hackerFeedResponse)
             }
@@ -58,10 +63,12 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         topStoryLiveData.postValue(handleHackerStoryResponse(response.await()))
     }
 
-    private fun handleHackerStoryResponse(response: Response<HackerStory>): Resource<HackerStory> {
+    private fun handleHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerStoryResponse ->
-                return Resource.Success(hackerStoryResponse)
+
+                topStoryResponse.add(hackerStoryResponse)
+                return Resource.Success(topStoryResponse)
             }
         }
 
@@ -79,7 +86,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
                 val time = measureTimeMillis {
-                    for (id in hackerFeedResponse.take(200)){
+                    for (id in hackerFeedResponse.take(200)) {
                         fetchNewStoryById(id)
                     }
                 }
@@ -97,9 +104,20 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         val response = async {
             hackerFeedRepository.fetchStoryById(id)
         }
-        newStoryLiveData.postValue(handleHackerStoryResponse(response.await()))
+        newStoryLiveData.postValue(handleNewHackerStoryResponse(response.await()))
     }
 
+    private fun handleNewHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
+        if (response.isSuccessful) {
+            response.body()?.let { hackerStoryResponse ->
+
+                newStoryResponse.add(hackerStoryResponse)
+                return  Resource.Success(newStoryResponse)
+            }
+        }
+
+        return Resource.Error(response.message())
+    }
 
     fun getJobStories() = viewModelScope.launch() {
         jobStoriesLiveData.postValue(Resource.Loading())
@@ -112,7 +130,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
                 val time = measureTimeMillis {
-                    for (id in hackerFeedResponse){
+                    for (id in hackerFeedResponse) {
                         fetchJobStoryById(id)
                     }
                 }
@@ -130,6 +148,18 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         val response = async {
             hackerFeedRepository.fetchStoryById(id)
         }
-        jobStoryLiveData.postValue(handleHackerStoryResponse(response.await()))
+        jobStoryLiveData.postValue(handleJobHackerStoryResponse(response.await()))
+    }
+
+    private fun handleJobHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
+        if (response.isSuccessful) {
+            response.body()?.let { hackerStoryResponse ->
+
+                jobStoryResponse.add(hackerStoryResponse)
+                return  Resource.Success(jobStoryResponse)
+            }
+        }
+
+        return Resource.Error(response.message())
     }
 }

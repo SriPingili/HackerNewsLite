@@ -1,22 +1,24 @@
 package com.androideveloper.thenewsapp.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androideveloper.hackernewsfeed.play.R
+import com.androideveloper.hackernewsfeed.play.model.HackerStory
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Resource
+import com.androideveloper.thenewsapp.adapter.HackerFeedAdapter
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
 
 class TopNewsFragment : Fragment(R.layout.fragment_top_news) {
     lateinit var viewModel: HackerFeedViewModel
-
-    //    lateinit var newsAdapter: NewsAdapter
+    lateinit var hackerFeedAdapter: HackerFeedAdapter
     val TAG = "BreakingNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,9 +43,6 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news) {
                 when (resourceResponse) {
                     is Resource.Success -> {
                         hideProgressBar()
-                        resourceResponse.data?.let { newsResponse ->
-//                            newsAdapter.differ.submitList(newsResponse.articles.toList())
-                        }
                     }
 
                     is Resource.Error -> {
@@ -63,6 +62,36 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news) {
                 }
 
             })
+
+        viewModel.topStoryLiveData.observe(viewLifecycleOwner, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+                    resourceResponse.data?.let {hackerStory->
+
+
+//                            val list = ArrayList<HackerStory>()
+//                            list.addAll(hackerFeedAdapter.differ.currentList)
+//                            list.add(hackerStory)
+////                            val list =hackerFeedAdapter.differ.currentList.add(hackerStory)
+//
+//                            Log.v("zzzzzzzzzz","size = ${hackerStory.by}")
+                            hackerFeedAdapter.differ.submitList(hackerStory.toList())
+//                            hackerFeedAdapter.differ.
+
+                    }
+                }
+
+                is Resource.Error -> {
+                    resourceResponse.message?.let { message ->
+                        Log.v("zzzz", " error = $message")
+                    }
+                }
+                is Resource.Loading -> {
+
+                }
+            }
+        })
     }
 
     private fun hideProgressBar() {
@@ -74,9 +103,9 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news) {
     }
 
     fun setUpRecyclerView() {
-//        newsAdapter = NewsAdapter()
+        hackerFeedAdapter = HackerFeedAdapter()
         rvTopNews.apply {
-//            adapter = newsAdapter
+            adapter = hackerFeedAdapter
             layoutManager = LinearLayoutManager(activity)
 
         }

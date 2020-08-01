@@ -1,6 +1,7 @@
 package com.androideveloper.thenewsapp.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AbsListView
 import android.widget.Toast
@@ -9,17 +10,19 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androideveloper.hackernewsfeed.play.R
+import com.androideveloper.hackernewsfeed.play.model.HackerStory
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Resource
+import com.androideveloper.thenewsapp.adapter.HackerFeedAdapter
 import kotlinx.android.synthetic.main.fragment_latest_news.*
 import kotlinx.android.synthetic.main.fragment_top_news.paginationProgressBar
 
 
 class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
     lateinit var viewModel: HackerFeedViewModel
-//    lateinit var newsAdapter: NewsAdapter
-    val TAG = "BreakingNewsFragment"
+    lateinit var latestHackerFeedAdapter: HackerFeedAdapter
+    val TAG = "LatestNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +54,11 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
                     is Resource.Error -> {
                         hideProgressBar()
                         resourceResponse.message?.let { message ->
-                            Toast.makeText(activity, "An error occured: $message", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                activity,
+                                "An error occured: $message",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     }
 
@@ -61,6 +68,33 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
                 }
 
             })
+
+        viewModel.newStoryLiveData.observe(viewLifecycleOwner, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+                    resourceResponse.data?.let {
+//                        if (it.type.equals("story")) {
+//                            val list = ArrayList<HackerStory>()
+//                            list.addAll(latestHackerFeedAdapter.differ.currentList)
+//                            list.add(it)
+////                            val list =hackerFeedAdapter.differ.currentList.add(hackerStory)
+//
+////                            Log.v("zzzzzzzzzz","size = ${it.by}")
+                            latestHackerFeedAdapter.differ.submitList(it.toList())
+                        //}
+                    }
+                }
+
+                is Resource.Error -> {
+                    resourceResponse.message?.let { message ->
+                        Log.v("zzzz", " error = $message")
+                    }
+                }
+                is Resource.Loading -> {
+                }
+            }
+        })
     }
 
     private fun hideProgressBar() {
@@ -72,14 +106,12 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
     }
 
     fun setUpRecyclerView() {
-//        newsAdapter = NewsAdapter()
+        latestHackerFeedAdapter = HackerFeedAdapter()
         rvLatestNews.apply {
-//            adapter = newsAdapter
+            adapter = latestHackerFeedAdapter
             layoutManager = LinearLayoutManager(activity)
-
         }
     }
-
 
 
 }
