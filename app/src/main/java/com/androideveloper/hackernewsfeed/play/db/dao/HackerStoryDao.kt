@@ -9,7 +9,7 @@ interface HackerStoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(hackerStory: HackerStory): Long
 
-    @Query("SELECT * FROM hacker_stories")
+    @Query("SELECT * FROM hacker_stories order by score asc")
     fun getAllSavedStories(): LiveData<List<HackerStory>>
 
     @Delete
