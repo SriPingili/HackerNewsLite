@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.androideveloper.hackernewsfeed.play.R
+import com.androideveloper.hackernewsfeed.play.db.HackerStoryDatabase
 import com.androideveloper.hackernewsfeed.play.repository.HackerFeedRepository
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import kotlinx.android.synthetic.main.activity_hacker_feed.*
@@ -23,7 +24,7 @@ class HackerFeedActivity : AppCompatActivity() {
 
         bottomNavigationView.setupWithNavController(navHostFragmentId.findNavController())
 
-        val hackerFeedRepository = HackerFeedRepository()
+        val hackerFeedRepository = HackerFeedRepository(HackerStoryDatabase(this))
         viewModel =
             ViewModelProvider(this, HackerFeedViewModelProviderFactory(hackerFeedRepository)).get(
                 HackerFeedViewModel::class.java
