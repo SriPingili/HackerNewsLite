@@ -3,6 +3,8 @@ package com.androideveloper.hackernewsfeed.play.model
 /*
 data class representing Hacker story from Hacker news api response
 * */
+import java.io.Serializable
+
 data class HackerStory(
     val by: String?,
     val descendants: Int?,
@@ -13,5 +15,6 @@ data class HackerStory(
     val type: String?,
     val url: String?,
     val text: String?,
-    val kids: List<Int>?
-)
+    val kids: List<Int>?,
+    var isImageSaved: Boolean = false
+) : Serializable

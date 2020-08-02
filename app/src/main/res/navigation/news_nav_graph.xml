@@ -39,5 +39,9 @@
     <fragment
         android:id="@+id/articleFragment"
         android:name="com.androideveloper.hackernewsfeed.play.ui.fragments.ArticleFragment"
-        android:label="ArticleFragment" />
+        android:label="ArticleFragment" >
+        <argument
+            android:name="article_arg"
+            app:argType="com.androideveloper.hackernewsfeed.play.model.HackerStory" />
+    </fragment>
 </navigation>

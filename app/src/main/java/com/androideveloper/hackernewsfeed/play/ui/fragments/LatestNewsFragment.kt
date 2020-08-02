@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
@@ -25,6 +26,17 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HackerFeedActivity).viewModel
         setUpRecyclerView()
+
+        hackerFeedAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("article_arg", it)//this needs to be same as in news_nav_graph.xml
+            }
+
+            findNavController().navigate(
+                R.id.action_latestNewsFragment_to_articleFragment,
+                bundle
+            )
+        }
 
         viewModel.newStoriesLiveData.observe(
             viewLifecycleOwner,
@@ -64,6 +76,7 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
                         Log.v(TAG, "An error occured: $message")
                     }
                 }
+
                 is Resource.Loading -> {
                 }
             }
