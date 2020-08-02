@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.androideveloper.hackernewsfeed.play.model.HackerStory
 import com.androideveloper.hackernewsfeed.play.repository.HackerFeedRepository
+import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.HOT_STORY_TYPE
+import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.JOB_STORY_TYPE
+import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.NEW_STORY_TYPE
 import com.androideveloper.hackernewsfeed.play.util.Resource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -67,13 +70,28 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerStoryResponse ->
-
+                hackerStoryResponse.storyType = HOT_STORY_TYPE
                 topStoryResponse.add(hackerStoryResponse)
                 return Resource.Success(topStoryResponse)
             }
         }
 
         return Resource.Error(response.message())
+    }
+
+    fun updateTopStoryLiveData(hackerStory: HackerStory) {
+        val response = topStoryResponse.find {
+            it.id == hackerStory.id
+        }
+
+        if (response != null) {
+            val index = topStoryResponse.indexOf(response)
+            topStoryResponse.remove(response)
+
+            topStoryResponse.add(index, hackerStory)
+
+            topStoryLiveData.postValue(Resource.Success(topStoryResponse))
+        }
     }
 
     fun getNewStories() = viewModelScope.launch() {
@@ -111,15 +129,29 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleNewHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerStoryResponse ->
-
+                hackerStoryResponse.storyType = NEW_STORY_TYPE
                 newStoryResponse.add(hackerStoryResponse)
-                return  Resource.Success(newStoryResponse)
+                return Resource.Success(newStoryResponse)
             }
         }
 
         return Resource.Error(response.message())
     }
 
+    fun updateNewStoryLiveData(hackerStory: HackerStory) {
+        val response = newStoryResponse.find {
+            it.id == hackerStory.id
+        }
+
+        if (response != null) {
+            val index = newStoryResponse.indexOf(response)
+            newStoryResponse.remove(response)
+
+            newStoryResponse.add(index, hackerStory)
+
+            newStoryLiveData.postValue(Resource.Success(newStoryResponse))
+        }
+    }
     fun getJobStories() = viewModelScope.launch() {
         jobStoriesLiveData.postValue(Resource.Loading())
 
@@ -155,12 +187,37 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleJobHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerStoryResponse ->
-
+                hackerStoryResponse.storyType = JOB_STORY_TYPE
                 jobStoryResponse.add(hackerStoryResponse)
-                return  Resource.Success(jobStoryResponse)
+                return Resource.Success(jobStoryResponse)
             }
         }
 
         return Resource.Error(response.message())
+    }
+
+    fun updateJobStoryLiveData(hackerStory: HackerStory) {
+        val response = jobStoryResponse.find {
+            it.id == hackerStory.id
+        }
+
+        if (response != null) {
+            val index = jobStoryResponse.indexOf(response)
+            jobStoryResponse.remove(response)
+
+            jobStoryResponse.add(index, hackerStory)
+
+            jobStoryLiveData.postValue(Resource.Success(jobStoryResponse))
+        }
+    }
+
+    fun getAllSavedStories() = hackerFeedRepository.getAllSavedNews()
+
+    fun saveStory(hackerStory: HackerStory) = viewModelScope.launch {
+        hackerFeedRepository.upsert(hackerStory)
+    }
+
+    fun deleteStory(hackerStory: HackerStory) = viewModelScope.launch {
+        hackerFeedRepository.delete(hackerStory)
     }
 }

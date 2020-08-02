@@ -5,5 +5,10 @@ class Constants {
         const val BASE_URL = "https://hacker-news.firebaseio.com"
         const val DELAY_IN_MILLI_SECONDS = 500L
         const val QUERY_PAGE_SIZE = 20
+
+
+        const val HOT_STORY_TYPE = "hot_story"
+        const val NEW_STORY_TYPE = "new_story"
+        const val JOB_STORY_TYPE = "job_story"
     }
 }

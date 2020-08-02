@@ -76,8 +76,6 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
                 }
             }
 
-
-
             setOnClickListener {
                 onItemClickListener?.let {
                     it(article)
@@ -93,11 +91,6 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
             view.setImageResource(R.drawable.ic_baseline_star_not_selected_24)
         }
     }
-
-    fun setSaveImage(hackerStory: HackerStory, id: Drawable, view: View) {
-
-    }
-
 
     fun setOnItemClickListener(listener: (HackerStory) -> Unit) {
         onItemClickListener = listener
