@@ -1,19 +1,22 @@
 package com.androideveloper.thenewsapp.adapter
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.model.HackerStory
 import kotlinx.android.synthetic.main.item_article_preview.view.*
-import java.lang.Exception
 import java.net.URL
 
 class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHolder>() {
     private var onItemClickListener: ((HackerStory) -> Unit)? = null
+    private var onSaveImageClickListener: ((HackerStory) -> Unit)? = null
+
 
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -54,7 +57,7 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
 
             try {
                 url = URL(url).host
-            }catch (e: Exception){
+            } catch (e: Exception) {
 
             }
 
@@ -63,6 +66,17 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
             authorTextViewId.text = "by ${article.by}"
             commentsCountTextViewId.text = article.kids?.size.toString()
             createdAtTextViewId.text = "Yesterday"
+            setImageBackground(article, clickToSaveImageViewId)
+
+            clickToSaveImageViewId.setOnClickListener { v ->
+                onSaveImageClickListener?.let {
+                    article.isImageSaved = !article.isImageSaved
+                    setImageBackground(article, clickToSaveImageViewId)
+                    it(article)
+                }
+            }
+
+
 
             setOnClickListener {
                 onItemClickListener?.let {
@@ -72,7 +86,24 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
         }
     }
 
+    private fun setImageBackground(article: HackerStory?, view: ImageView) {
+        if (article?.isImageSaved!!) {
+            view.setImageResource(R.drawable.ic_baseline_star_selected_24)
+        } else {
+            view.setImageResource(R.drawable.ic_baseline_star_not_selected_24)
+        }
+    }
+
+    fun setSaveImage(hackerStory: HackerStory, id: Drawable, view: View) {
+
+    }
+
+
     fun setOnItemClickListener(listener: (HackerStory) -> Unit) {
         onItemClickListener = listener
+    }
+
+    fun setOnImageClickListener(listener: (HackerStory) -> Unit) {
+        onSaveImageClickListener = listener
     }
 }
