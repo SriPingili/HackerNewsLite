@@ -9,10 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androideveloper.hackernewsfeed.play.R
+import com.androideveloper.hackernewsfeed.play.adapter.HackerFeedAdapter
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Resource
-import com.androideveloper.thenewsapp.adapter.HackerFeedAdapter
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
 /*

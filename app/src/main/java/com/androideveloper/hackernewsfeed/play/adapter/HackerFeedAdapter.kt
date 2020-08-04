@@ -1,4 +1,4 @@
-package com.androideveloper.thenewsapp.adapter
+package com.androideveloper.hackernewsfeed.play.adapter
 
 import android.util.Log
 import android.view.LayoutInflater

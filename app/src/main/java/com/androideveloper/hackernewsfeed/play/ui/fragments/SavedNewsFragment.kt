@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androideveloper.hackernewsfeed.play.R
+import com.androideveloper.hackernewsfeed.play.adapter.HackerFeedAdapter
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.HOT_STORY_TYPE
 import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.JOB_STORY_TYPE
 import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.NEW_STORY_TYPE
-import com.androideveloper.thenewsapp.adapter.HackerFeedAdapter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_saved_news.*
 
@@ -40,7 +40,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
         }
 
         hackerFeedAdapter.setOnImageClickListener {
-            //todo also save id and isenabled (if true) to db, everytime app starts, check in db for true and update flags accrdingly
+            //todo also save id and isenabled (if true) to db, everytime app starts, check in db for true and update flags accordingly
             if (it?.isImageSaved!!) {
                 viewModel.saveStory(it)
             } else {
