@@ -11,5 +11,6 @@ class Constants {
         const val NEW_STORY_TYPE = "new_story"
         const val JOB_STORY_TYPE = "job_story"
         const val QUERY_SIZE_LIMIT = 3
+        const val SWIPE_TO_REFRESH_DELAY = 2000L
     }
 }

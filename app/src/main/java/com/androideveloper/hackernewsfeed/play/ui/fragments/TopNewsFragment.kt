@@ -25,6 +25,7 @@ import com.androideveloper.hackernewsfeed.play.extensions.initialize
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.QUERY_SIZE_LIMIT
+import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.androideveloper.hackernewsfeed.play.util.Resource
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
@@ -181,7 +182,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         val handler = Handler()
         handler.postDelayed({ //hide the loading screen after 30 secs if no cloud-session cookie
             swipeRefresh.isRefreshing = false
-        }, 3000L)
+        }, SWIPE_TO_REFRESH_DELAY)
     }
 
 
