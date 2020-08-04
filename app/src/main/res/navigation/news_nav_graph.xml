@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/topNewsFragment"
-        android:name="com.androideveloper.thenewsapp.ui.fragments.TopNewsFragment"
+        android:name="com.android.thenewsapp.ui.fragments.TopNewsFragment"
         android:label="TopNewsFragment" >
         <action
             android:id="@+id/action_topNewsFragment_to_articleFragment"
@@ -13,7 +13,7 @@
     </fragment>
     <fragment
         android:id="@+id/latestNewsFragment"
-        android:name="com.androideveloper.thenewsapp.ui.fragments.LatestNewsFragment"
+        android:name="com.android.thenewsapp.ui.fragments.LatestNewsFragment"
         android:label="LatestNewsFragment" >
         <action
             android:id="@+id/action_latestNewsFragment_to_articleFragment"
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/jobNewsFragment"
-        android:name="com.androideveloper.thenewsapp.ui.fragments.JobNewsFragment"
+        android:name="com.android.thenewsapp.ui.fragments.JobNewsFragment"
         android:label="JobNewsFragment" >
         <action
             android:id="@+id/action_jobNewsFragment_to_articleFragment"
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
-        android:name="com.androideveloper.thenewsapp.ui.fragments.SavedNewsFragment"
+        android:name="com.android.thenewsapp.ui.fragments.SavedNewsFragment"
         android:label="SavedNewsFragment" >
         <action
             android:id="@+id/action_savedNewsFragment_to_articleFragment"
@@ -37,10 +37,10 @@
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
-        android:name="com.androideveloper.hackernewsfeed.play.ui.fragments.ArticleFragment"
+        android:name="com.android.hackernewslite.play.ui.fragments.ArticleFragment"
         android:label="ArticleFragment" >
         <argument
             android:name="article_arg"
-            app:argType="com.androideveloper.hackernewsfeed.play.model.HackerStory" />
+            app:argType="com.android.hackernewslite.play.model.HackerStory" />
     </fragment>
 </navigation>
