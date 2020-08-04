@@ -64,12 +64,14 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
                     JOB_STORY_TYPE -> viewModel.updateJobStoryLiveData(it)
                 }
                 viewModel.deleteStory(it)
+                savedFeedAdapter.notifyDataSetChanged()
             }
             Toast.makeText(context, "clicked ${it.isImageSaved}", Toast.LENGTH_SHORT).show()
         }
 
         viewModel.getAllSavedStories().observe(viewLifecycleOwner, Observer { hackerStories ->
             savedFeedAdapter.submitList(hackerStories)
+            savedFeedAdapter.notifyDataSetChanged()
         })
 
 
@@ -116,6 +118,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
         rvSavedNews.apply {
             adapter = savedFeedAdapter
             layoutManager = LinearLayoutManager(activity)
+            itemAnimator = null
         }
     }
 

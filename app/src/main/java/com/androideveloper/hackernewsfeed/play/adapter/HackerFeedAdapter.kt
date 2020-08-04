@@ -122,8 +122,8 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
                 }))
         }
 
-        if (onBindComplete)
-            notifyDataSetChanged()
+//        if (onBindComplete)
+//            notifyDataSetChanged()
     }
 }
 
