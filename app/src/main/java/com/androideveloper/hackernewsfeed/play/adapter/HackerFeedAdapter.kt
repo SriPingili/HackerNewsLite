@@ -1,10 +1,10 @@
-package com.androideveloper.thenewsapp.adapter
+package com.androideveloper.hackernewsfeed.play.adapter
 
 import android.graphics.drawable.Drawable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.AutoCompleteTextView
 import android.widget.ImageView
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +16,6 @@ import java.net.URL
 class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHolder>() {
     private var onItemClickListener: ((HackerStory) -> Unit)? = null
     private var onSaveImageClickListener: ((HackerStory) -> Unit)? = null
-
 
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 

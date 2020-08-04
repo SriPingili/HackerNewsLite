@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androideveloper.hackernewsfeed.play.R
+import com.androideveloper.hackernewsfeed.play.adapter.HackerFeedAdapter
 import com.androideveloper.hackernewsfeed.play.model.HackerStory
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
@@ -18,7 +19,6 @@ import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.HOT_STOR
 import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.JOB_STORY_TYPE
 import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.NEW_STORY_TYPE
 import com.androideveloper.hackernewsfeed.play.util.Resource
-import com.androideveloper.thenewsapp.adapter.HackerFeedAdapter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_saved_news.*
 

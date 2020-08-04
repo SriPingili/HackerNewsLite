@@ -1,5 +1,6 @@
 package com.androideveloper.hackernewsfeed.play.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.webkit.CookieManager
@@ -12,6 +13,7 @@ import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_article.*
+
 
 class ArticleFragment : Fragment(R.layout.fragment_article) {
     lateinit var viewModel: HackerFeedViewModel
@@ -35,6 +37,11 @@ class ArticleFragment : Fragment(R.layout.fragment_article) {
 
         fab.setOnClickListener {
 //            viewModel.saveArticle(article)
+            val sharingIntent = Intent(Intent.ACTION_SEND)
+            sharingIntent.type = "text/plain"
+//            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, article.url)
+            startActivity(Intent.createChooser(sharingIntent, "Share Via"))
             Snackbar.make(it, "Article saved successfully", Snackbar.LENGTH_SHORT).show()
         }
 
