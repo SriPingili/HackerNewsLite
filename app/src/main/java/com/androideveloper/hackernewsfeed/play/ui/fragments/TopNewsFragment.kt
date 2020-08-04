@@ -3,6 +3,7 @@ package com.androideveloper.thenewsapp.ui.fragments
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.text.InputType
 import android.util.Log
 import android.view.Menu
@@ -16,8 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.adapter.HackerFeedAdapter
+import com.androideveloper.hackernewsfeed.play.extensions.initialize
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.QUERY_SIZE_LIMIT
@@ -27,12 +30,13 @@ import kotlinx.android.synthetic.main.fragment_top_news.*
 /*
 * This Fragment is responsible for displaying the top news from the Hacker News api
 * */
-class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQueryTextListener {
+class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQueryTextListener,
+    SwipeRefreshLayout.OnRefreshListener {
     lateinit var viewModel: HackerFeedViewModel
     lateinit var hackerFeedAdapter: HackerFeedAdapter
-    val TAG = "BreakingNewsFragment"
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
+    val TAG = "BreakingNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +44,8 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         setUpRecyclerView()
 
         setHasOptionsMenu(true)
+
+        swipeRefresh.initialize(this)
 
         hackerFeedAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
@@ -168,5 +174,14 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         hackerFeedAdapter.filter(if (newText.length >= QUERY_SIZE_LIMIT) newText else null)
 
         return true
+    }
+
+    override fun onRefresh() {
+        viewModel.getTopStores()
+
+        val handler = Handler()
+        handler.postDelayed({
+            swipeRefresh.isRefreshing = false
+        }, 3000L)
     }
 }

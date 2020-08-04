@@ -3,6 +3,7 @@ package com.androideveloper.thenewsapp.ui.fragments
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.text.InputType
 import android.util.Log
 import android.view.Menu
@@ -11,14 +12,15 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.adapter.HackerFeedAdapter
+import com.androideveloper.hackernewsfeed.play.extensions.initialize
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Constants
@@ -28,7 +30,8 @@ import kotlinx.android.synthetic.main.fragment_job_news.*
 /*
 * This Fragment is responsible for displaying the latest Job posts from the Hacker News api
 * */
-class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQueryTextListener {
+class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQueryTextListener,
+    SwipeRefreshLayout.OnRefreshListener {
     lateinit var viewModel: HackerFeedViewModel
     lateinit var hackerFeedAdapter: HackerFeedAdapter
     val TAG = "JobNewsFragment"
@@ -40,6 +43,7 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
         viewModel = (activity as HackerFeedActivity).viewModel
         setUpRecyclerView()
         setHasOptionsMenu(true)
+        swipeRefresh.initialize(this)
 
         hackerFeedAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
@@ -170,5 +174,14 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
         hackerFeedAdapter.filter(if (newText.length >= Constants.QUERY_SIZE_LIMIT) newText else null)
 
         return true
+    }
+
+    override fun onRefresh() {
+        viewModel.getJobStories()
+
+        val handler = Handler()
+        handler.postDelayed({ //hide the loading screen after 3 secs
+            swipeRefresh.isRefreshing = false
+        }, 3000L)
     }
 }

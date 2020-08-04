@@ -3,6 +3,7 @@ package com.androideveloper.thenewsapp.ui.fragments
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.text.InputType
 import android.util.Log
 import android.view.Menu
@@ -11,35 +12,42 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.adapter.HackerFeedAdapter
+import com.androideveloper.hackernewsfeed.play.extensions.initialize
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.androideveloper.hackernewsfeed.play.util.Resource
 import kotlinx.android.synthetic.main.fragment_latest_news.*
+import kotlinx.android.synthetic.main.fragment_latest_news.swipeRefresh
+import kotlinx.android.synthetic.main.fragment_top_news.*
+
+import kotlinx.android.synthetic.main.fragment_top_news.progressBar
 
 /*
 * This Fragment is responsible for displaying the latest news from the Hacker News api
 * */
-class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.OnQueryTextListener {
+class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.OnQueryTextListener,
+    SwipeRefreshLayout.OnRefreshListener {
     lateinit var viewModel: HackerFeedViewModel
-    val TAG = "LatestNewsFragment"
     lateinit var hackerFeedAdapter: HackerFeedAdapter
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
+    val TAG = "LatestNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HackerFeedActivity).viewModel
         setUpRecyclerView()
         setHasOptionsMenu(true)
+        swipeRefresh.initialize(this)
 
         hackerFeedAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
@@ -59,7 +67,6 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
             } else {
                 viewModel.deleteStory(it)
             }
-            Toast.makeText(context, "clicked ${it.isImageSaved}", Toast.LENGTH_SHORT).show()
         }
 
         viewModel.newStoriesLiveData.observe(
@@ -167,6 +174,16 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
 
     override fun onQueryTextChange(newText: String): Boolean {
         hackerFeedAdapter.filter(if (newText.length >= QUERY_SIZE_LIMIT) newText else null)
+
         return true
+    }
+
+    override fun onRefresh() {
+        viewModel.getNewStories()
+
+        val handler = Handler()
+        handler.postDelayed({ //hide the loading screen after 3 secs
+            swipeRefresh.isRefreshing = false
+        }, 3000L)
     }
 }
