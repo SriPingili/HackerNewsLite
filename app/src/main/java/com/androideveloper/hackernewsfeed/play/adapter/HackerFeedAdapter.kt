@@ -1,10 +1,9 @@
 package com.androideveloper.hackernewsfeed.play.adapter
 
-import android.graphics.drawable.Drawable
-import android.view.*
-import android.widget.AutoCompleteTextView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +17,7 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
     private var onSaveImageClickListener: ((HackerStory) -> Unit)? = null
 
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    var fullList : MutableList<HackerStory> = mutableListOf()
 
     private val differCallback = object : DiffUtil.ItemCallback<HackerStory>() {
         override fun areItemsTheSame(oldItem: HackerStory, newItem: HackerStory): Boolean {
@@ -98,4 +98,24 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
     fun setOnImageClickListener(listener: (HackerStory) -> Unit) {
         onSaveImageClickListener = listener
     }
+
+
+    fun submitList(stores: List<HackerStory>) {
+        differ.submitList(stores)
+        fullList.clear()
+        fullList.addAll(stores.toMutableList())
+    }
+
+    fun filter(query: String?) {
+        if (query == null || query.isEmpty()) {
+                differ.submitList(fullList)
+        } else {
+            val lowercaseQuery = query.toLowerCase()
+            differ.submitList((
+                    fullList.filter {
+                    it.title?.toLowerCase()?.contains(lowercaseQuery)!!
+                }))
+        }
+    }
 }
+
