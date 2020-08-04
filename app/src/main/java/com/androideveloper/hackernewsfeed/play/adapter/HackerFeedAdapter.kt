@@ -20,6 +20,7 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
     private var onItemClickListener: ((HackerStory) -> Unit)? = null
     private var onSaveImageClickListener: ((HackerStory) -> Unit)? = null
     val TAG = "HackerFeedAdapter"
+    var fullList: MutableList<HackerStory> = mutableListOf()
 
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -100,5 +101,34 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
 
     fun setOnImageClickListener(listener: (HackerStory) -> Unit) {
         onSaveImageClickListener = listener
+    }
+
+
+    /*
+    submits the hacker news response to the differ util, also saves
+    the response to fullList (used by search)
+     */
+    fun submitList(stores: List<HackerStory>) {
+        differ.submitList(stores)
+        fullList.clear()
+        fullList.addAll(stores.toMutableList())
+    }
+
+    /*
+    helper method that filters through the data as user types
+    in the search view
+    * */
+    fun filter(query: String?) {
+        if (query == null || query.isEmpty()) {
+            differ.submitList(fullList)
+        } else {
+            val lowercaseQuery = query.toLowerCase()
+            differ.submitList(
+                (
+                        fullList.filter {
+                            it.title?.toLowerCase()?.contains(lowercaseQuery)!!
+                        })
+            )
+        }
     }
 }
