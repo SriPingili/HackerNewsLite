@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">The Hacker News Feed</string>
-    <string name="search">Search Here haha</string>
+    <string name="search">Type upto 3 characters to begin search</string>
 </resources>

@@ -23,6 +23,7 @@ import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.adapter.HackerFeedAdapter
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
+import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.androideveloper.hackernewsfeed.play.util.Resource
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
@@ -164,7 +165,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
-        hackerFeedAdapter.filter( if (newText.length >= 3) newText else null)
+        hackerFeedAdapter.filter( if (newText.length >= QUERY_SIZE_LIMIT) newText else null)
 
         return true
     }

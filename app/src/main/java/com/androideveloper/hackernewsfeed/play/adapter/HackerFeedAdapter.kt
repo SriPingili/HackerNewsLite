@@ -15,6 +15,7 @@ import java.net.URL
 class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHolder>() {
     private var onItemClickListener: ((HackerStory) -> Unit)? = null
     private var onSaveImageClickListener: ((HackerStory) -> Unit)? = null
+    var onBindComplete = true
 
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     var fullList : MutableList<HackerStory> = mutableListOf()
@@ -46,6 +47,8 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+        onBindComplete = false
+
         val article = differ.currentList[position]
 
         holder.itemView.apply {
@@ -81,6 +84,8 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
                 }
             }
         }
+
+        onBindComplete = true
     }
 
     private fun setImageBackground(article: HackerStory?, view: ImageView) {
@@ -116,6 +121,9 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
                     it.title?.toLowerCase()?.contains(lowercaseQuery)!!
                 }))
         }
+
+        if (onBindComplete)
+            notifyDataSetChanged()
     }
 }
 

@@ -10,5 +10,6 @@ class Constants {
         const val HOT_STORY_TYPE = "hot_story"
         const val NEW_STORY_TYPE = "new_story"
         const val JOB_STORY_TYPE = "job_story"
+        const val QUERY_SIZE_LIMIT = 3
     }
 }
