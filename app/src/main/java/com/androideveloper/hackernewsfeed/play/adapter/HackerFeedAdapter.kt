@@ -123,11 +123,10 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
             differ.submitList(fullList)
         } else {
             val lowercaseQuery = query.toLowerCase()
-            differ.submitList(
-                (
-                        fullList.filter {
-                            it.title?.toLowerCase()?.contains(lowercaseQuery)!!
-                        })
+            differ.submitList((
+                    fullList.filter {
+                        it.title?.toLowerCase()?.contains(lowercaseQuery)!!
+                    })
             )
         }
     }
