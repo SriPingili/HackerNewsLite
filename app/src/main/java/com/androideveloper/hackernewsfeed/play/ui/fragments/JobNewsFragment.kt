@@ -24,6 +24,7 @@ import com.androideveloper.hackernewsfeed.play.extensions.initialize
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Constants
+import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.androideveloper.hackernewsfeed.play.util.Resource
 import kotlinx.android.synthetic.main.fragment_job_news.*
 
@@ -182,6 +183,6 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
         val handler = Handler()
         handler.postDelayed({ //hide the loading screen after 3 secs
             swipeRefresh.isRefreshing = false
-        }, 3000L)
+        }, SWIPE_TO_REFRESH_DELAY)
     }
 }

@@ -24,6 +24,7 @@ import com.androideveloper.hackernewsfeed.play.extensions.initialize
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.QUERY_SIZE_LIMIT
+import com.androideveloper.hackernewsfeed.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.androideveloper.hackernewsfeed.play.util.Resource
 import kotlinx.android.synthetic.main.fragment_latest_news.*
 import kotlinx.android.synthetic.main.fragment_latest_news.swipeRefresh
@@ -184,6 +185,6 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
         val handler = Handler()
         handler.postDelayed({ //hide the loading screen after 3 secs
             swipeRefresh.isRefreshing = false
-        }, 3000L)
+        }, SWIPE_TO_REFRESH_DELAY)
     }
 }
