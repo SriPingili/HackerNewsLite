@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/news_nav_graph"
-    app:startDestination="@id/topNewsFragment">
+    app:startDestination="@id/splashScreenFragment">
+    <fragment
+        android:id="@+id/splashScreenFragment"
+        android:name="com.android.hackernewslite.play.ui.fragments.SplashScreenFragment"
+        android:label="SplashScreenFragment" >
+        <action
+            android:id="@+id/action_splashScreenFragment_to_topNewsFragment"
+            app:destination="@id/topNewsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/topNewsFragment"
