@@ -26,6 +26,7 @@ import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.android.hackernewslite.play.util.Resource
+import com.android.hackernewslite.play.util.SharePreferenceUtil
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
 /*
@@ -60,7 +61,6 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         }
 
         hackerFeedAdapter.setOnImageClickListener {
-            //todo also save id and isenabled (if true) to db, everytime app starts, check in db for true and update flags accrdingly
             if (it?.isImageSaved!!) {
                 viewModel.saveStory(it)
             } else {

@@ -61,7 +61,6 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
         }
 
         hackerFeedAdapter.setOnImageClickListener {
-            //todo also save id and isenabled (if true) to db, everytime app starts, check in db for true and update flags accrdingly
             if (it?.isImageSaved!!) {
                 viewModel.saveStory(it)
             } else {

@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,9 +21,6 @@ import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.adapter.HackerFeedAdapter
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
-import com.android.hackernewslite.play.util.Constants.Companion.HOT_STORY_TYPE
-import com.android.hackernewslite.play.util.Constants.Companion.JOB_STORY_TYPE
-import com.android.hackernewslite.play.util.Constants.Companion.NEW_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_saved_news.*
@@ -54,23 +50,16 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
         }
 
         hackerFeedAdapter.setOnImageClickListener {
-            //todo also save id and isenabled (if true) to db, everytime app starts, check in db for true and update flags accrdingly
-            if (it?.isImageSaved!!) {
-                viewModel.saveStory(it)
-            } else {
-                when (it.storyType) {
-                    HOT_STORY_TYPE -> viewModel.updateTopStoryLiveData(it)
-                    NEW_STORY_TYPE -> viewModel.updateNewStoryLiveData(it)
-                    JOB_STORY_TYPE -> viewModel.updateJobStoryLiveData(it)
-                }
+            val status = it.isImageSaved
+
+            if (!status) {
                 viewModel.deleteStory(it)
-                hackerFeedAdapter.notifyDataSetChanged()
             }
         }
 
         viewModel.getAllSavedStories().observe(viewLifecycleOwner, Observer { hackerStories ->
             hackerFeedAdapter.submitList(hackerStories)
-            hackerFeedAdapter.notifyDataSetChanged()
+            hackerFeedAdapter.notifyDataSetChanged()//todo this might not be needed
         })
 
 
@@ -95,7 +84,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
                 Snackbar.make(view, "Successfully deleted article", Snackbar.LENGTH_SHORT).apply {
                     setAction("UNDO", View.OnClickListener {
                         viewModel.saveStory(hackerStory)
-                    })
+                    })//todo implement this, simple
 
                     show()
                 }
@@ -157,7 +146,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
-        hackerFeedAdapter.filter( if (newText.length >= QUERY_SIZE_LIMIT) newText else null)
+        hackerFeedAdapter.filter(if (newText.length >= QUERY_SIZE_LIMIT) newText else null)
 
         return true
     }

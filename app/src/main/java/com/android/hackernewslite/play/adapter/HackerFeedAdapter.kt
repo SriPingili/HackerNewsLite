@@ -1,5 +1,6 @@
 package com.android.hackernewslite.play.adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.extensions.relativeDateFormat
 import com.android.hackernewslite.play.model.HackerStory
+import com.android.hackernewslite.play.util.SharePreferenceUtil
 import kotlinx.android.synthetic.main.item_article_preview.view.*
 import java.net.URL
 import java.util.*
@@ -67,13 +69,15 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
             urlTextViewId.text = url
             authorTextViewId.text = "by ${article.by}"
             commentsCountTextViewId.text = article.kids?.size.toString()
-            createdAtTextViewId.text = article.time?.times(1000)?.let { Date(it).relativeDateFormat(context) }
-            setImageBackground(article, clickToSaveImageViewId)
+            createdAtTextViewId.text =
+                article.time?.times(1000)?.let { Date(it).relativeDateFormat(context) }
+            setImageBackground(article, clickToSaveImageViewId, context)
 
             clickToSaveImageViewId.setOnClickListener { v ->
                 onSaveImageClickListener?.let {
-                    article.isImageSaved = !article.isImageSaved
-                    setImageBackground(article, clickToSaveImageViewId)
+                    article.isImageSaved = !SharePreferenceUtil.getSavedStatus(article.id, context)
+                    SharePreferenceUtil.setSavedStatus(article.id, article.isImageSaved, context)
+                    setImageBackground(article, clickToSaveImageViewId, context)
                     it(article)
                 }
             }
@@ -86,8 +90,8 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
         }
     }
 
-    private fun setImageBackground(article: HackerStory?, view: ImageView) {
-        if (article?.isImageSaved!!) {
+    private fun setImageBackground(article: HackerStory, view: ImageView, context: Context) {
+        if (SharePreferenceUtil.getSavedStatus(article.id, context)) {
             view.setImageResource(R.drawable.ic_baseline_star_selected_24)
         } else {
             view.setImageResource(R.drawable.ic_baseline_star_not_selected_24)
@@ -125,10 +129,11 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
             differ.submitList(fullList)
         } else {
             val lowercaseQuery = query.toLowerCase()
-            differ.submitList((
-                    fullList.filter {
-                        it.title?.toLowerCase()?.contains(lowercaseQuery)!!
-                    })
+            differ.submitList(
+                (
+                        fullList.filter {
+                            it.title?.toLowerCase()?.contains(lowercaseQuery)!!
+                        })
             )
         }
     }
