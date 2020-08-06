@@ -151,6 +151,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
             newStoryLiveData.postValue(Resource.Success(newStoryResponse))
         }
     }
+
     fun getJobStories() = viewModelScope.launch() {
         jobStoriesLiveData.postValue(Resource.Loading())
 

@@ -26,6 +26,7 @@ import com.android.hackernewslite.play.util.Constants.Companion.HOT_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.JOB_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.NEW_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
+import com.android.hackernewslite.play.util.SharePreferenceUtil
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_saved_news.*
 
@@ -51,24 +52,18 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
         }
 
         savedFeedAdapter.setOnImageClickListener {
-            //todo also save id and isenabled (if true) to db, everytime app starts, check in db for true and update flags accrdingly
-            if (it?.isImageSaved!!) {
-                viewModel.saveStory(it)
-            } else {
-                when (it.storyType) {
-                    HOT_STORY_TYPE -> viewModel.updateTopStoryLiveData(it)
-                    NEW_STORY_TYPE -> viewModel.updateNewStoryLiveData(it)
-                    JOB_STORY_TYPE -> viewModel.updateJobStoryLiveData(it)
-                }
+            val  status = it.isImageSaved
+//            SharePreferenceUtil.setSavedStatus(it.id, status, context!!)
+
+            if (!status) {
                 viewModel.deleteStory(it)
-                savedFeedAdapter.notifyDataSetChanged()
+//                savedFeedAdapter.notifyDataSetChanged()
             }
-            Toast.makeText(context, "clicked ${it.isImageSaved}", Toast.LENGTH_SHORT).show()
         }
 
         viewModel.getAllSavedStories().observe(viewLifecycleOwner, Observer { hackerStories ->
             savedFeedAdapter.submitList(hackerStories)
-            savedFeedAdapter.notifyDataSetChanged()
+            savedFeedAdapter.notifyDataSetChanged()//todo this might not be needed
         })
 
 
@@ -93,10 +88,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
                 Snackbar.make(view, "Successfully deleted article", Snackbar.LENGTH_SHORT).apply {
                     setAction("UNDO", View.OnClickListener {
                         viewModel.saveStory(hackerStory)
-                    })
-                    /*setAction("UNDO") {
-                        viewModel.saveArticle(article)
-                    }*/
+                    })//todo implement this, simple
 
                     show()
                 }
