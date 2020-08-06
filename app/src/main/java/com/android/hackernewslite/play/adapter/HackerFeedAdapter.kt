@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.hackernewslite.play.R
+import com.android.hackernewslite.play.extensions.relativeDateFormat
 import com.android.hackernewslite.play.model.HackerStory
 import kotlinx.android.synthetic.main.item_article_preview.view.*
 import java.net.URL
+import java.util.*
 
 class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHolder>() {
     private var onItemClickListener: ((HackerStory) -> Unit)? = null
@@ -63,11 +65,10 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
 
             }
 
-
             urlTextViewId.text = url
             authorTextViewId.text = "by ${article.by}"
             commentsCountTextViewId.text = article.kids?.size.toString()
-            createdAtTextViewId.text = "Yesterday"
+            createdAtTextViewId.text = article.time?.times(1000)?.let { Date(it).relativeDateFormat(context) }
             setImageBackground(article, clickToSaveImageViewId)
 
             clickToSaveImageViewId.setOnClickListener { v ->

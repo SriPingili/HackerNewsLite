@@ -11,7 +11,7 @@ data class HackerStory(
     @PrimaryKey
     val id: Int,
     val score: Int?,
-    val time: Int?,
+    val time: Long?,
     val title: String?,
     val type: String?,
     val url: String?,
