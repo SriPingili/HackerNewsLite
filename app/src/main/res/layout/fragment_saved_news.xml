@@ -9,4 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/noResultsID"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:text="Save an article from your app to see it listed here."/>
+
 </FrameLayout>

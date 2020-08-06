@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -52,7 +54,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
         }
 
         savedFeedAdapter.setOnImageClickListener {
-            val  status = it.isImageSaved
+            val status = it.isImageSaved
 //            SharePreferenceUtil.setSavedStatus(it.id, status, context!!)
 
             if (!status) {
@@ -62,8 +64,16 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
         }
 
         viewModel.getAllSavedStories().observe(viewLifecycleOwner, Observer { hackerStories ->
-            savedFeedAdapter.submitList(hackerStories)
-            savedFeedAdapter.notifyDataSetChanged()//todo this might not be needed
+
+            if (hackerStories.size == 0) {
+                noResultsID.visibility = VISIBLE
+                rvSavedNews.visibility = INVISIBLE
+            } else {
+                noResultsID.visibility = INVISIBLE
+                rvSavedNews.visibility = VISIBLE
+                savedFeedAdapter.submitList(hackerStories)
+                savedFeedAdapter.notifyDataSetChanged()//todo this might not be needed
+            }
         })
 
 
@@ -128,7 +138,8 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
             searchView?.maxWidth = resources.displayMetrics.widthPixels
             val manager = context!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
             searchView?.setSearchableInfo(manager.getSearchableInfo(activity?.componentName))
-            val searchFrame = searchView?.findViewById(androidx.appcompat.R.id.search_edit_frame) as LinearLayout
+            val searchFrame =
+                searchView?.findViewById(androidx.appcompat.R.id.search_edit_frame) as LinearLayout
             (searchFrame.layoutParams as LinearLayout.LayoutParams).marginStart = 0
         }
     }
@@ -147,7 +158,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
-        savedFeedAdapter.filter( if (newText.length >= QUERY_SIZE_LIMIT) newText else null)
+        savedFeedAdapter.filter(if (newText.length >= QUERY_SIZE_LIMIT) newText else null)
 
         return true
     }
