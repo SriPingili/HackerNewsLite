@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
@@ -58,8 +60,15 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
         }
 
         viewModel.getAllSavedStories().observe(viewLifecycleOwner, Observer { hackerStories ->
-            hackerFeedAdapter.submitList(hackerStories)
-            hackerFeedAdapter.notifyDataSetChanged()//todo this might not be needed
+            if (hackerStories.size == 0) {
+                noResultsID.visibility = VISIBLE
+                rvSavedNews.visibility = INVISIBLE
+            } else {
+                noResultsID.visibility = INVISIBLE
+                rvSavedNews.visibility = VISIBLE
+                hackerFeedAdapter.submitList(hackerStories)
+                hackerFeedAdapter.notifyDataSetChanged()//todo this might not be needed
+            }
         })
 
 
