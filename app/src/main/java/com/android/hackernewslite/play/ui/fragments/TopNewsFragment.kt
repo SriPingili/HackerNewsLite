@@ -44,6 +44,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HackerFeedActivity).viewModel
         setUpRecyclerView()
+        (activity as HackerFeedActivity).ShowBotomNav()
 
         setHasOptionsMenu(true)
 
@@ -73,11 +74,9 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
             Observer { resourceResponse -> //Resource<NewsResponse
                 when (resourceResponse) {
                     is Resource.Success -> {
-                        hideProgressBar()
                     }
 
                     is Resource.Error -> {
-                        hideProgressBar()
                         resourceResponse.message?.let { message ->
                             Toast.makeText(
                                 activity,
@@ -88,7 +87,6 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
                     }
 
                     is Resource.Loading -> {
-                        showProgressBar()
                     }
                 }
 
@@ -110,18 +108,9 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
                 }
 
                 is Resource.Loading -> {
-                    showProgressBar()
                 }
             }
         })
-    }
-
-    private fun hideProgressBar() {
-        paginationProgressBar.visibility = View.INVISIBLE
-    }
-
-    private fun showProgressBar() {
-        paginationProgressBar.visibility = View.VISIBLE
     }
 
     fun setUpRecyclerView() {
@@ -183,6 +172,9 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
             swipeRefresh.isRefreshing = false
         }, SWIPE_TO_REFRESH_DELAY)
     }
+
+
+
 
 
 }

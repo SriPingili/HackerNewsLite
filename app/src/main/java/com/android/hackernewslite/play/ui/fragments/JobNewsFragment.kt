@@ -29,7 +29,6 @@ import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH
 import com.android.hackernewslite.play.util.Resource
 import kotlinx.android.synthetic.main.fragment_job_news.*
 import kotlinx.android.synthetic.main.fragment_job_news.swipeRefresh
-import kotlinx.android.synthetic.main.fragment_top_news.paginationProgressBar
 
 
 class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQueryTextListener,
@@ -71,11 +70,9 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
             Observer { resourceResponse -> //Resource<NewsResponse
                 when (resourceResponse) {
                     is Resource.Success -> {
-                        hideProgressBar()
                     }
 
                     is Resource.Error -> {
-                        hideProgressBar()
                         resourceResponse.message?.let { message ->
                             Toast.makeText(
                                 activity,
@@ -86,7 +83,6 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
                     }
 
                     is Resource.Loading -> {
-                        showProgressBar()
                     }
                 }
 
@@ -107,19 +103,10 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
                     }
                 }
                 is Resource.Loading -> {
-                    showProgressBar()
+
                 }
             }
         })
-    }
-
-
-    private fun hideProgressBar() {
-        paginationProgressBar.visibility = View.INVISIBLE
-    }
-
-    private fun showProgressBar() {
-        paginationProgressBar.visibility = View.VISIBLE
     }
 
     fun setUpRecyclerView() {
