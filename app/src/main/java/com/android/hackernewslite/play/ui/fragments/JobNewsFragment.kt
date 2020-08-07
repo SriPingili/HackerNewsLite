@@ -70,18 +70,15 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
             Observer { resourceResponse -> //Resource<NewsResponse
                 when (resourceResponse) {
                     is Resource.Success -> {
-                        hideProgressBar()
                     }
 
                     is Resource.Error -> {
-                        hideProgressBar()
                         resourceResponse.message?.let { message ->
                             Log.v(TAG, "An error occured: $message")
                         }
                     }
 
                     is Resource.Loading -> {
-                        showProgressBar()
                     }
                 }
 
@@ -103,24 +100,10 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
                 }
 
                 is Resource.Loading -> {
-                    showProgressBar()
+
                 }
             }
         })
-    }
-
-    /*
-    helper method to hide the progress bar
-    */
-    private fun hideProgressBar() {
-        progressBar.visibility = View.INVISIBLE
-    }
-
-    /*
-    helper method to show the progress bar
-    */
-    private fun showProgressBar() {
-        progressBar.visibility = View.VISIBLE
     }
 
     /*

@@ -26,7 +26,6 @@ import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.android.hackernewslite.play.util.Resource
-import com.android.hackernewslite.play.util.SharePreferenceUtil
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
 /*
@@ -44,6 +43,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HackerFeedActivity).viewModel
         setUpRecyclerView()
+        (activity as HackerFeedActivity).showBottomNavAndActionBar()
 
         setHasOptionsMenu(true)
 
@@ -73,18 +73,15 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
             Observer { resourceResponse -> //Resource<NewsResponse
                 when (resourceResponse) {
                     is Resource.Success -> {
-                        hideProgressBar()
                     }
 
                     is Resource.Error -> {
-                        hideProgressBar()
                         resourceResponse.message?.let { message ->
                             Log.v(TAG, "An error occured: $message")
                         }
                     }
 
                     is Resource.Loading -> {
-                        showProgressBar()
                     }
                 }
             })
@@ -108,20 +105,6 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
                 }
             }
         })
-    }
-
-    /*
-    helper method to hide the progress bar
-    */
-    private fun hideProgressBar() {
-        progressBar.visibility = View.INVISIBLE
-    }
-
-    /*
-    helper method to show the progress bar
-    */
-    private fun showProgressBar() {
-        progressBar.visibility = View.VISIBLE
     }
 
     /*

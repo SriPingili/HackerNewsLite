@@ -1,6 +1,8 @@
 package com.android.hackernewslite.play.ui
 
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -17,11 +19,13 @@ import kotlinx.android.synthetic.main.activity_hacker_feed.*
 * */
 class HackerFeedActivity : AppCompatActivity() {
     lateinit var viewModel: HackerFeedViewModel
+    lateinit var actionBar: ActionBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hacker_feed)
+        actionBar = supportActionBar!!
 
         bottomNavigationView.setupWithNavController(navHostFragmentId.findNavController())
 
@@ -30,5 +34,21 @@ class HackerFeedActivity : AppCompatActivity() {
             ViewModelProvider(this, HackerFeedViewModelProviderFactory(hackerFeedRepository)).get(
                 HackerFeedViewModel::class.java
             )
+    }
+
+    /*
+    * helper method that hides bottom nav and navigation
+    * */
+    fun hideBottomNavAndActionBar() {
+        bottomNavigationView?.visibility = View.GONE
+        actionBar.hide()
+    }
+
+    /*
+    * helper method that shows bottom nav and navigation
+    * */
+    fun showBottomNavAndActionBar() {
+        bottomNavigationView?.visibility = View.VISIBLE
+        actionBar.show()
     }
 }
