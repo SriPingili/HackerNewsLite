@@ -1,4 +1,4 @@
-package com.android.hackernewslite.play.ui
+package com.android.hackernewslite.play.ui.viewmodel.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

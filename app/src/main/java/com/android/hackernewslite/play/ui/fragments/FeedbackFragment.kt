@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.android.hackernewslite.play.R
-import com.android.hackernewslite.play.ui.SendMail
+import com.android.hackernewslite.play.email.SendMail
 import kotlinx.android.synthetic.main.fragment_submit_feedback.*
 
 class FeedbackFragment : DialogFragment() {
@@ -53,7 +53,8 @@ class FeedbackFragment : DialogFragment() {
 
         button.setOnClickListener {
             val body = editTextTextMultiLine.text.toString()
-            val sendMail = SendMail(context, body)
+            val sendMail =
+                SendMail(context, body)
             sendMail.execute()
             dismiss()
         }

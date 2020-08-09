@@ -1,4 +1,4 @@
-package com.android.hackernewslite.play.ui;
+package com.android.hackernewslite.play.email;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,14 +17,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class SendMail extends AsyncTask<Void,Void,Void>  {
-
-    //Add those line in dependencies
-    //implementation files('libs/activation.jar')
-    //implementation files('libs/additionnal.jar')
-    //implementation files('libs/mail.jar')
-
-    //Need INTERNET permission
-
     //Variables
     private Context mContext;
     private Session mSession;
