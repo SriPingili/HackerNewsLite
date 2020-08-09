@@ -4,8 +4,6 @@ import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -13,7 +11,6 @@ import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
 import com.android.hackernewslite.play.util.Resource
-import kotlinx.android.synthetic.main.activity_hacker_feed.*
 
 class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
 

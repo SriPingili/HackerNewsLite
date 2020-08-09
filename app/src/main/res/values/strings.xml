@@ -14,4 +14,5 @@
     <!-- format string for long form dates and times, such as "4/05/2018 1:54 PM" for April 5, 2018 at 1:54 PM -->
     <string name="long_with_time_date_format">M/dd/yyyy h:mm a</string>
     <string name="yesterday">Yesterday</string>
+    <string name="settings">Settings</string>
 </resources>

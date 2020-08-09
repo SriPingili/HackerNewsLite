@@ -2,6 +2,7 @@ package com.android.hackernewslite.play.ui.fragments
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
@@ -22,6 +23,7 @@ import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.adapter.HackerFeedAdapter
 import com.android.hackernewslite.play.extensions.initialize
 import com.android.hackernewslite.play.ui.HackerFeedActivity
+import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
 import com.android.hackernewslite.play.util.Constants
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
@@ -116,6 +118,16 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
             layoutManager = LinearLayoutManager(activity)
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.settings_id) {
+            startActivity(Intent(context, SettingsActivity::class.java))
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_search, menu)

@@ -11,6 +11,7 @@ import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.db.HackerStoryDatabase
 import com.android.hackernewslite.play.repository.HackerFeedRepository
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
+import com.android.hackernewslite.play.ui.viewmodel.factory.HackerFeedViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_hacker_feed.*
 
 /*
@@ -24,6 +25,7 @@ class HackerFeedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+        overridePendingTransition(0,0)
         setContentView(R.layout.activity_hacker_feed)
         actionBar = supportActionBar!!
 
@@ -31,7 +33,11 @@ class HackerFeedActivity : AppCompatActivity() {
 
         val hackerFeedRepository = HackerFeedRepository(HackerStoryDatabase(this))
         viewModel =
-            ViewModelProvider(this, HackerFeedViewModelProviderFactory(hackerFeedRepository)).get(
+            ViewModelProvider(this,
+                HackerFeedViewModelProviderFactory(
+                    hackerFeedRepository
+                )
+            ).get(
                 HackerFeedViewModel::class.java
             )
     }

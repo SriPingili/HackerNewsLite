@@ -3,6 +3,7 @@
     package="com.android.hackernewslite.play">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,8 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.android.hackernewslite.play.ui.HackerFeedActivity"
-            android:theme="@style/SplashScreenTheme">
+            android:name=".ui.SettingsActivity"
+            android:label="@string/settings"
+            android:parentActivityName=".ui.HackerFeedActivity">
+        </activity>
+        <activity
+            android:name=".ui.HackerFeedActivity"
+            android:theme="@style/SplashScreenTheme"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
