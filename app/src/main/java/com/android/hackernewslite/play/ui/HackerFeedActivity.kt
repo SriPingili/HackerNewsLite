@@ -24,6 +24,7 @@ class HackerFeedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+        overridePendingTransition(0,0)
         setContentView(R.layout.activity_hacker_feed)
         actionBar = supportActionBar!!
 
@@ -39,9 +40,6 @@ class HackerFeedActivity : AppCompatActivity() {
     fun hideBotomNav(){
         bottomNavigationView?.visibility = View.GONE
         actionBar.hide()
-
-
-
     }
 
 

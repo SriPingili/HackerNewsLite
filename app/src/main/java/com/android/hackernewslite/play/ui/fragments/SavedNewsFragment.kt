@@ -2,6 +2,7 @@ package com.android.thenewsapp.ui.fragments
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.view.Menu
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.adapter.HackerFeedAdapter
 import com.android.hackernewslite.play.ui.HackerFeedActivity
+import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
 import com.android.hackernewslite.play.util.Constants.Companion.HOT_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.JOB_STORY_TYPE
@@ -127,6 +129,16 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
         setSearchMenuItemVisibility(true)
         searchView = searchMenuItem?.actionView as SearchView
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.settings_id) {
+            startActivity(Intent(context, SettingsActivity::class.java))
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         context?.let {

@@ -17,5 +17,8 @@ class Constants {
         const val PREFS_KEY = "shared_prefs_key"
         const val SAVED_ITEMS_ID = "saved_items"
         const val SAVED_ITEM_ID = "saved_item_id"
+
+        const val EMAIL = "harikillz@gmail.com"
+        const val PASSWORD = "9885887571"
     }
 }

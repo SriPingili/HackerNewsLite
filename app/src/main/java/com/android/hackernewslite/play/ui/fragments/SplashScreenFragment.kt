@@ -33,6 +33,7 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
                        {
 //                           (activity as HackerFeedActivity).ShowBotomNav()
                            findNavController().navigate(R.id.action_splashScreenFragment_to_topNewsFragment, null)
+                           //todo find way to finish the fragment
                           activity?.getFragmentManager()?.popBackStack()
                        }
                     }
