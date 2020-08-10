@@ -15,6 +15,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.android.hackernewslite.play.BuildConfig
 import com.android.hackernewslite.play.R
+import com.android.hackernewslite.play.ui.LicenseActivity
 import com.android.hackernewslite.play.util.Constants.Companion.shouldOpenInCustomTabs
 import com.android.hackernewslite.play.util.SharePreferenceUtil
 
@@ -49,6 +50,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         licensePreference.key = "app_license"
         licensePreference.title = "License Agreement"
         licensePreference.isIconSpaceReserved = false
+        licensePreference.setOnPreferenceClickListener {
+
+            startActivity(Intent(context, LicenseActivity::class.java))
+
+
+            true
+        }
 
 
         val aboutCategory = PreferenceCategory(context)

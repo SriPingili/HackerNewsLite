@@ -11,15 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.LicenseActivity"
+            android:parentActivityName=".ui.SettingsActivity"
+            android:label="License"></activity>
         <activity
             android:name=".ui.SettingsActivity"
+            android:launchMode="singleTop"
             android:label="@string/settings"
-            android:parentActivityName=".ui.HackerFeedActivity">
-        </activity>
+            android:parentActivityName=".ui.HackerFeedActivity"></activity>
         <activity
             android:name=".ui.HackerFeedActivity"
-            android:theme="@style/SplashScreenTheme"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
