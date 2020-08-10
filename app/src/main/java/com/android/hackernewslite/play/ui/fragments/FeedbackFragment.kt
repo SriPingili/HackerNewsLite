@@ -23,7 +23,9 @@ class FeedbackFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_submit_feedback, container)
+        val view = inflater.inflate(R.layout.fragment_submit_feedback, container)
+        view?.setBackgroundColor(resources.getColor(R.color.backgroundColor, null))
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,10 +44,10 @@ class FeedbackFragment : DialogFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (count > 0) {
                     button.isEnabled = true
-                    button.background.alpha = 100
+                    button.alpha = 1f
                 } else {
                     button.isEnabled = false
-                    button.background.alpha = 50
+                    button.alpha = 0.5f
                 }
             }
         })

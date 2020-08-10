@@ -28,6 +28,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article) {
 
         webView.apply {
             webViewClient = WebViewClient()
+            setBackgroundColor(resources.getColor(R.color.backgroundColor,null))
             loadUrl(article.url)
             settings.domStorageEnabled = true
             settings.javaScriptEnabled = true

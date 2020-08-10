@@ -4,6 +4,9 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -17,6 +20,17 @@ import com.android.hackernewslite.play.util.SharePreferenceUtil
 * Fragment responsible for displaying settinga
 * */
 class SettingsFragment : PreferenceFragmentCompat() {
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        view?.setBackgroundColor(resources.getColor(R.color.backgroundColor, null))
+        return view
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)

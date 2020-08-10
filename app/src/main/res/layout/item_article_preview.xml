@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="120dp"
+    android:background="@color/backgroundColor"
     android:padding="8dp">
 
     <!--TODO move all dimensions to dimens.xml-->
@@ -12,6 +13,7 @@
         android:id="@+id/scoreTextViewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:background="@drawable/rounded_textview"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +43,6 @@
         android:layout_marginStart="8dp"
         android:lines="1"
         android:maxLines="1"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/scoreTextViewId"
         app:layout_constraintTop_toBottomOf="@+id/titleTextViewId"
@@ -77,6 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
+        android:textColor="@color/colorAccent"
         app:layout_constraintRight_toLeftOf="@+id/clickToSaveImageViewId"
         app:layout_constraintStart_toEndOf="@+id/commentsLogoImageViewId"
         app:layout_constraintTop_toBottomOf="@+id/urlTextViewId"
@@ -96,11 +98,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toEndOf="@+id/commentsCountTextViewId"
         app:layout_constraintTop_toBottomOf="@+id/urlTextViewId"
         app:srcCompat="@drawable/ic_baseline_star_not_selected_24" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
