@@ -23,6 +23,15 @@ class SharePreferenceUtil {
                 .putBoolean(Constants.SAVED_ITEM_ID + id, status).apply()
         }
 
+        fun getCustomTabsPreferenceStatus(context: Context): Boolean {
+            return getSharedPreferences(context).getBoolean(Constants.CUSTOM_TABS_PREFS, false)
+        }
+
+        fun setCustomTabsPreferenceStatus(status: Boolean, context: Context) {
+            getSharedPreferences(context).edit()
+                .putBoolean(Constants.CUSTOM_TABS_PREFS, status).apply()
+        }
+
 
         /**
          * returns the list of saved item id's

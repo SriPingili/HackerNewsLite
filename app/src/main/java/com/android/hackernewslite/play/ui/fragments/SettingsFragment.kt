@@ -4,12 +4,16 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.android.hackernewslite.play.BuildConfig
 import com.android.hackernewslite.play.R
+import com.android.hackernewslite.play.util.Constants.Companion.shouldOpenInCustomTabs
+import com.android.hackernewslite.play.util.SharePreferenceUtil
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -42,12 +46,34 @@ class SettingsFragment : PreferenceFragmentCompat() {
         aboutCategory.addPreference(versionPreference)
         aboutCategory.addPreference(licensePreference)
 
+
+        val customTabPreference = SwitchPreference(context)
+        customTabPreference.key = "custom_tab"
+        customTabPreference.title = "Use Chrome Tabs"
+        customTabPreference.summary = "Open links in Chrome tabs instead of default browser"
+        customTabPreference.isIconSpaceReserved = false
+        customTabPreference.onPreferenceChangeListener =  object : Preference.OnPreferenceChangeListener{
+            override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
+                SharePreferenceUtil.setCustomTabsPreferenceStatus(newValue as Boolean, context)
+                return true
+            }
+
+        }
+
+        val displayCategory = PreferenceCategory(context)
+        displayCategory.key = "display_category"
+        displayCategory.title = "Display"
+        displayCategory.isIconSpaceReserved = false
+        screen.addPreference(displayCategory)
+        displayCategory.addPreference(customTabPreference)
+
+
         val reviewPreference = Preference(context)
         reviewPreference.key = "review"
         reviewPreference.title = "Rate the app"
         reviewPreference.isIconSpaceReserved = false
         reviewPreference.setOnPreferenceClickListener {
-        // getPackageName() from Context or Activity object
+            // getPackageName() from Context or Activity object
 
             try {
                 startActivity(

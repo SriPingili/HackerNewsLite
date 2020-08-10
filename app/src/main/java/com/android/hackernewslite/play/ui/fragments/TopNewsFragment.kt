@@ -28,6 +28,8 @@ import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
+import com.android.hackernewslite.play.util.Constants.Companion.shouldOpenInCustomTabs
+import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.Resource
 import com.android.hackernewslite.play.util.SharePreferenceUtil
 import kotlinx.android.synthetic.main.fragment_top_news.*
@@ -37,6 +39,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     SwipeRefreshLayout.OnRefreshListener {
     lateinit var viewModel: HackerFeedViewModel
     lateinit var hackerFeedAdapter: HackerFeedAdapter
+    lateinit var customTabsUtil: CustomTabsUtil
     val TAG = "BreakingNewsFragment"
 
     private var searchMenuItem: MenuItem? = null
@@ -46,6 +49,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HackerFeedActivity).viewModel
         setUpRecyclerView()
+        customTabsUtil = CustomTabsUtil(context!!)
         (activity as HackerFeedActivity).ShowBotomNav()
 
         setHasOptionsMenu(true)
@@ -53,14 +57,27 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         swipeRefresh.initialize(this)
 
         hackerFeedAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article_arg", it)//this needs to be same as in news_nav_graph.xml
+
+            if(it.url.isNullOrBlank()){
+                Toast.makeText(context,"Cannot open this page",Toast.LENGTH_SHORT).show()
+                return@setOnItemClickListener
             }
 
-            findNavController().navigate(
-                R.id.action_topNewsFragment_to_articleFragment,
-                bundle
-            )
+            if(SharePreferenceUtil.getCustomTabsPreferenceStatus(context!!)){
+                customTabsUtil.setToUseBackArrow()
+                customTabsUtil.openCustomTab(it.url)
+            }
+
+            else {
+                val bundle = Bundle().apply {
+                    putSerializable("article_arg", it)//this needs to be same as in news_nav_graph.xml
+                }
+
+                findNavController().navigate(
+                    R.id.action_topNewsFragment_to_articleFragment,
+                    bundle
+                )
+            }
         }
 
         hackerFeedAdapter.setOnImageClickListener {

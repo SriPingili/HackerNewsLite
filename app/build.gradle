@@ -78,4 +78,7 @@ dependencies {
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
     implementation files('libs/mail.jar')
+
+    //Chrome custom tabs
+    implementation 'androidx.browser:browser:1.2.0'
 }

@@ -30,6 +30,7 @@ import com.android.hackernewslite.play.util.Constants.Companion.HOT_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.JOB_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.NEW_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
+import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.SharePreferenceUtil
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_saved_news.*
@@ -39,20 +40,38 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
     lateinit var savedFeedAdapter: HackerFeedAdapter
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
+    lateinit var customTabsUtil: CustomTabsUtil
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HackerFeedActivity).viewModel
         setUpRecyclerView()
+        customTabsUtil = CustomTabsUtil(context!!)
 
         setHasOptionsMenu(true)
 
         savedFeedAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article_arg", it) //this needs to be same as in news_nav_graph.xml
+            if (it.url.isNullOrBlank()) {
+                Toast.makeText(context, "Cannot open this page", Toast.LENGTH_SHORT).show()
+                return@setOnItemClickListener
             }
 
-            findNavController().navigate(R.id.action_savedNewsFragment_to_articleFragment, bundle)
+            if (SharePreferenceUtil.getCustomTabsPreferenceStatus(context!!)) {
+                customTabsUtil.setToUseBackArrow()
+                customTabsUtil.openCustomTab(it.url)
+            } else {
+                val bundle = Bundle().apply {
+                    putSerializable(
+                        "article_arg",
+                        it
+                    ) //this needs to be same as in news_nav_graph.xml
+                }
+
+                findNavController().navigate(
+                    R.id.action_savedNewsFragment_to_articleFragment,
+                    bundle
+                )
+            }
         }
 
         savedFeedAdapter.setOnImageClickListener {
