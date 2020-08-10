@@ -8,8 +8,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.android.hackernewslite.play.BuildConfig
 import com.android.hackernewslite.play.R
+import com.android.hackernewslite.play.util.SharePreferenceUtil
 
 /*
 * Fragment responsible for displaying settinga
@@ -43,6 +45,30 @@ class SettingsFragment : PreferenceFragmentCompat() {
         screen.addPreference(aboutCategory)
         aboutCategory.addPreference(versionPreference)
         aboutCategory.addPreference(licensePreference)
+
+        //display
+        val displayCategory = PreferenceCategory(context)
+        displayCategory.key = "display_category"
+        displayCategory.title = "Display"
+        displayCategory.isIconSpaceReserved = false
+        screen.addPreference(displayCategory)
+
+
+        //use custom tabs
+        val customTabPreference = SwitchPreference(context)
+        customTabPreference.key = "custom_tab"
+        customTabPreference.title = "Use Chrome Tabs"
+        customTabPreference.summary = "Open links in Chrome tabs instead of default browser"
+        customTabPreference.isIconSpaceReserved = false
+        customTabPreference.onPreferenceChangeListener =
+            object : Preference.OnPreferenceChangeListener {
+                override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
+                    SharePreferenceUtil.setCustomTabsPreferenceStatus(newValue as Boolean, context)
+                    return true
+                }
+            }
+
+        displayCategory.addPreference(customTabPreference)
 
         //Help
         val helpCategory = PreferenceCategory(context)
