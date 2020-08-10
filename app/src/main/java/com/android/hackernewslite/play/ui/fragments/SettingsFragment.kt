@@ -4,6 +4,9 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
@@ -17,6 +20,17 @@ import com.android.hackernewslite.play.util.SharePreferenceUtil
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        view?.setBackgroundColor(resources.getColor(R.color.backgroundColor, null))
+        return view
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
@@ -53,12 +67,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         customTabPreference.summary = "Open links in Chrome tabs instead of default browser"
         customTabPreference.isIconSpaceReserved = false
         customTabPreference.setDefaultValue(true)
-        customTabPreference.onPreferenceChangeListener =  object : Preference.OnPreferenceChangeListener{
-            override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
-                SharePreferenceUtil.setCustomTabsPreferenceStatus(newValue as Boolean, context)
-                return true
+        customTabPreference.onPreferenceChangeListener =
+            object : Preference.OnPreferenceChangeListener {
+                override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
+                    SharePreferenceUtil.setCustomTabsPreferenceStatus(newValue as Boolean, context)
+                    return true
+                }
             }
-        }
 
         val displayCategory = PreferenceCategory(context)
         displayCategory.key = "display_category"

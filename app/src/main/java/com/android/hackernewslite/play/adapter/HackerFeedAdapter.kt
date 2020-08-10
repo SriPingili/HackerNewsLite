@@ -70,7 +70,9 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
 
             urlTextViewId.text = url
             authorTextViewId.text = "by ${article.by}"
-            commentsCountTextViewId.text = article.kids?.size.toString()
+
+            val count = article.kids?.size ?: 0
+            commentsCountTextViewId.text = count.toString()
             createdAtTextViewId.text =
                 article.time?.times(1000)?.let { Date(it).relativeDateFormat(context) }
             setImageBackground(article, clickToSaveImageViewId, context)

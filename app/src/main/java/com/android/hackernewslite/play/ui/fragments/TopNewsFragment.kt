@@ -94,6 +94,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
         hackerFeedAdapter.setOnImageClickListener {
             if (it?.isImageSaved!!) {
+                Toast.makeText(context,"Story saved successfully.", Toast.LENGTH_SHORT).show()
                 viewModel.saveStory(it)
             } else {
                 viewModel.deleteStory(it)
