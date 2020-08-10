@@ -126,36 +126,6 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         return Resource.Error(response.message())
     }
 
-    fun updateTopStoryLiveData(hackerStory: HackerStory) {
-        val response = topStoryResponse.find {
-            it.id == hackerStory.id
-        }
-
-        if (response != null) {
-            val index = topStoryResponse.indexOf(response)
-            topStoryResponse.remove(response)
-
-            topStoryResponse.add(index, hackerStory)
-
-            topStoryLiveData.postValue(Resource.Success(topStoryResponse))
-        }
-    }
-
-    fun updateNewStoryLiveData(hackerStory: HackerStory) {
-        val response = newStoryResponse.find {
-            it.id == hackerStory.id
-        }
-
-        if (response != null) {
-            val index = newStoryResponse.indexOf(response)
-            newStoryResponse.remove(response)
-
-            newStoryResponse.add(index, hackerStory)
-
-            newStoryLiveData.postValue(Resource.Success(newStoryResponse))
-        }
-    }
-
     /*
     Fetches the latest job stories by calling the hacker news api
     * */
@@ -200,22 +170,6 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         }
 
         return Resource.Error(response.message())
-    }
-
-
-    fun updateJobStoryLiveData(hackerStory: HackerStory) {
-        val response = jobStoryResponse.find {
-            it.id == hackerStory.id
-        }
-
-        if (response != null) {
-            val index = jobStoryResponse.indexOf(response)
-            jobStoryResponse.remove(response)
-
-            jobStoryResponse.add(index, hackerStory)
-
-            jobStoryLiveData.postValue(Resource.Success(jobStoryResponse))
-        }
     }
 
     fun getAllSavedStories() = hackerFeedRepository.getAllSavedNews()

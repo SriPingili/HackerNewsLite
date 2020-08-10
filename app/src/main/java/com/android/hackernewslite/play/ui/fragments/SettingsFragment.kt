@@ -60,6 +60,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         customTabPreference.title = "Use Chrome Tabs"
         customTabPreference.summary = "Open links in Chrome tabs instead of default browser"
         customTabPreference.isIconSpaceReserved = false
+        customTabPreference.setDefaultValue(true)
         customTabPreference.onPreferenceChangeListener =
             object : Preference.OnPreferenceChangeListener {
                 override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {

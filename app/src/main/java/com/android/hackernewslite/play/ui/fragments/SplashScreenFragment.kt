@@ -26,7 +26,7 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
 
                 is Resource.Success -> {
                     resourceResponse.data?.let { hackerStory ->
-                        if (hackerStory.size > 20) {
+                        if (hackerStory.size > 5) {
                             findNavController().navigate(
                                 R.id.action_splashScreenFragment_to_topNewsFragment,
                                 null

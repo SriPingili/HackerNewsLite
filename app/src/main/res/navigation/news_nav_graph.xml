@@ -8,7 +8,11 @@
         android:label="TopNewsFragment">
         <action
             android:id="@+id/action_topNewsFragment_to_articleFragment"
-            app:destination="@id/articleFragment" />
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_right_fragment"
+            app:exitAnim="@anim/slide_out_left_fragment"
+            app:popEnterAnim="@anim/slide_in_left_fragment"
+            app:popExitAnim="@anim/slide_out_right_fragment"/>
     </fragment>
     <fragment
         android:id="@+id/latestNewsFragment"
@@ -16,7 +20,11 @@
         android:label="LatestNewsFragment">
         <action
             android:id="@+id/action_latestNewsFragment_to_articleFragment"
-            app:destination="@id/articleFragment" />
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_right_fragment"
+            app:exitAnim="@anim/slide_out_left_fragment"
+            app:popEnterAnim="@anim/slide_in_left_fragment"
+            app:popExitAnim="@anim/slide_out_right_fragment"/>
     </fragment>
     <fragment
         android:id="@+id/jobNewsFragment"
@@ -24,7 +32,11 @@
         android:label="JobNewsFragment">
         <action
             android:id="@+id/action_jobNewsFragment_to_articleFragment"
-            app:destination="@id/articleFragment" />
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_right_fragment"
+            app:exitAnim="@anim/slide_out_left_fragment"
+            app:popEnterAnim="@anim/slide_in_left_fragment"
+            app:popExitAnim="@anim/slide_out_right_fragment"/>
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
@@ -32,7 +44,11 @@
         android:label="SavedNewsFragment">
         <action
             android:id="@+id/action_savedNewsFragment_to_articleFragment"
-            app:destination="@id/articleFragment" />
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_right_fragment"
+            app:exitAnim="@anim/slide_out_left_fragment"
+            app:popEnterAnim="@anim/slide_in_left_fragment"
+            app:popExitAnim="@anim/slide_out_right_fragment"/>
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
@@ -48,6 +64,10 @@
         android:label="SplashScreenFragment" >
         <action
             android:id="@+id/action_splashScreenFragment_to_topNewsFragment"
-            app:destination="@id/topNewsFragment" />
+            app:destination="@id/topNewsFragment"
+            app:enterAnim="@anim/slide_in_right_fragment"
+            app:exitAnim="@anim/slide_out_left_fragment"
+            app:popEnterAnim="@anim/slide_in_left_fragment"
+            app:popExitAnim="@anim/slide_out_right_fragment"/>
     </fragment>
 </navigation>
