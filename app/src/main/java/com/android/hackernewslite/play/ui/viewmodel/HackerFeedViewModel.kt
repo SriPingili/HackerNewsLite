@@ -45,7 +45,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
 
-                for (id in hackerFeedResponse.take(200)) {
+                for (id in hackerFeedResponse) {
                     fetchStoryBydId(id)
                 }
 
@@ -104,7 +104,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
                 val time = measureTimeMillis {
-                    for (id in hackerFeedResponse.take(200)) {
+                    for (id in hackerFeedResponse) {
                         fetchNewStoryById(id)
                     }
                 }

@@ -14,6 +14,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -53,6 +54,17 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         (activity as HackerFeedActivity).ShowBotomNav()
 
         setHasOptionsMenu(true)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                activity?.getFragmentManager()?.popBackStack()
+                val intent = Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context!!.startActivity(intent);
+            }
+
+        })
 
         swipeRefresh.initialize(this)
 

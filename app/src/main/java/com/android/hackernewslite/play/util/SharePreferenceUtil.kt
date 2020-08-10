@@ -24,7 +24,7 @@ class SharePreferenceUtil {
         }
 
         fun getCustomTabsPreferenceStatus(context: Context): Boolean {
-            return getSharedPreferences(context).getBoolean(Constants.CUSTOM_TABS_PREFS, false)
+            return getSharedPreferences(context).getBoolean(Constants.CUSTOM_TABS_PREFS, true)
         }
 
         fun setCustomTabsPreferenceStatus(status: Boolean, context: Context) {
