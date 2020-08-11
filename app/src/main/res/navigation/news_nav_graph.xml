@@ -13,6 +13,10 @@
             app:exitAnim="@anim/slide_out_left_fragment"
             app:popEnterAnim="@anim/slide_in_left_fragment"
             app:popExitAnim="@anim/slide_out_right_fragment"/>
+        <argument
+            android:name="isFromSplashScreen"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/latestNewsFragment"

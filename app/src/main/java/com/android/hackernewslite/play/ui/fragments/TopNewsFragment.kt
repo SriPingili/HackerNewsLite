@@ -19,6 +19,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.hackernewslite.play.R
@@ -32,6 +33,7 @@ import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH
 import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.Resource
 import com.android.hackernewslite.play.util.SharePreferenceUtil
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
 /*
@@ -45,6 +47,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     private var searchView: SearchView? = null
     lateinit var customTabsUtil: CustomTabsUtil
     val TAG = "BreakingNewsFragment"
+    val args: TopNewsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,6 +55,12 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         setUpRecyclerView()
         (activity as HackerFeedActivity).showBottomNavAndActionBar()
         customTabsUtil = CustomTabsUtil(context!!)
+
+        val result = args.isFromSplashScreen
+
+        if (result) {
+            Snackbar.make(view, "Syncing...", Snackbar.LENGTH_LONG).show()
+        }
 
         setHasOptionsMenu(true)
         swipeRefresh.initialize(this)
@@ -66,7 +75,6 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context!!.startActivity(intent);
                 }
-
             })
 
         hackerFeedAdapter.setOnItemClickListener {
@@ -95,7 +103,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
         hackerFeedAdapter.setOnImageClickListener {
             if (it?.isImageSaved!!) {
-                Toast.makeText(context,"Story saved successfully.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Story saved successfully.", Toast.LENGTH_SHORT).show()
                 viewModel.saveStory(it)
             } else {
                 viewModel.deleteStory(it)
@@ -200,16 +208,16 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
     override fun onQueryTextChange(newText: String): Boolean {
         hackerFeedAdapter.filter(if (newText.length >= QUERY_SIZE_LIMIT) newText else null)
-
         return true
     }
 
     override fun onRefresh() {
         viewModel.getTopStores()
+        view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_LONG).show() }
 
         val handler = Handler()
         handler.postDelayed({
-            swipeRefresh.isRefreshing = false
+            swipeRefresh?.isRefreshing = false
         }, SWIPE_TO_REFRESH_DELAY)
     }
 }

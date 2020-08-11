@@ -194,7 +194,7 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
 
         val handler = Handler()
         handler.postDelayed({ //hide the loading screen after 3 secs
-            swipeRefresh.isRefreshing = false
+            swipeRefresh?.isRefreshing = false
         }, SWIPE_TO_REFRESH_DELAY)
     }
 }
