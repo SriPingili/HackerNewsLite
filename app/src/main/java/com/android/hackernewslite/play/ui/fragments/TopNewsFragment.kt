@@ -7,10 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -19,6 +16,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.hackernewslite.play.R
@@ -33,6 +31,7 @@ import com.android.hackernewslite.play.util.Constants.Companion.shouldOpenInCust
 import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.Resource
 import com.android.hackernewslite.play.util.SharePreferenceUtil
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
 
@@ -45,6 +44,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
+    val args:TopNewsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,6 +52,12 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         setUpRecyclerView()
         customTabsUtil = CustomTabsUtil(context!!)
         (activity as HackerFeedActivity).ShowBotomNav()
+
+        val result = args.isFromSplashScreen
+
+        if(result){
+            Snackbar.make(view,"Syncing...", Snackbar.LENGTH_LONG).show()
+        }
 
         setHasOptionsMenu(true)
 
@@ -208,10 +214,11 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
     override fun onRefresh() {
         viewModel.getTopStores()
+        view?.let { Snackbar.make(it,"Syncing...", Snackbar.LENGTH_LONG).show() }
 
         val handler = Handler()
         handler.postDelayed({ //hide the loading screen after 30 secs if no cloud-session cookie
-            swipeRefresh.isRefreshing = false
+            swipeRefresh?.isRefreshing = false
         }, SWIPE_TO_REFRESH_DELAY)
     }
 

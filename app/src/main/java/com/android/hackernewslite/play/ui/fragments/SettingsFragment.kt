@@ -43,8 +43,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         versionPreference.title = "Version"
         versionPreference.summary = BuildConfig.VERSION_NAME
         versionPreference.isIconSpaceReserved = false
-//        versionPreference.icon =
-//            resources.getDrawable(R.drawable.ic_baseline_fiber_new_24, context.theme)
 
         val licensePreference = Preference(context)
         licensePreference.key = "app_license"
