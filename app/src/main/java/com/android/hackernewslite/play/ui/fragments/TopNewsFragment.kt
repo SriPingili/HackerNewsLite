@@ -1,5 +1,6 @@
 package com.android.hackernewslite.play.ui.fragments
 
+import android.app.ActivityOptions
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -199,6 +200,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settings_id) {
             startActivity(Intent(context, SettingsActivity::class.java))
+//            activity?.overridePendingTransition(0, R.anim.slide_in_right)
             return true
         }
 

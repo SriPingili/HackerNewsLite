@@ -16,6 +16,7 @@ class LicenseActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this)
+            overridePendingTransition(0, R.anim.slide_out_left)
         }
 
         return super.onOptionsItemSelected(item)

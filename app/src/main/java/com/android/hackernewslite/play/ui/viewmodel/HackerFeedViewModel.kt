@@ -58,11 +58,14 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
             response.body()?.let { hackerFeedResponse ->
                 responseCounter = 0
                 topStoryResponse.clear()
-                initialTopResponseSize = hackerFeedResponse.size
 
-                for (id in hackerFeedResponse) {
+                val newResponse = hackerFeedResponse.take(250)
+                initialTopResponseSize = newResponse.size
+
+                for (id in newResponse) {
                     fetchTopStoryById(id)
                 }
+
                 return Resource.Success(hackerFeedResponse)
             }
         }
@@ -152,7 +155,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleJobStoriesResponse(response: Response<List<Int>>): Resource<List<Int>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
-                for (id in hackerFeedResponse) {
+                for (id in hackerFeedResponse.take(200)) {
                     fetchJobStoryById(id)
                 }
 
