@@ -8,6 +8,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.android.hackernewslite.play.BuildConfig
 import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
@@ -43,7 +44,16 @@ class ArticleFragment : Fragment(R.layout.fragment_article) {
 //            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
             sharingIntent.putExtra(Intent.EXTRA_TEXT, article.url)
             startActivity(Intent.createChooser(sharingIntent, "Share Via"))
-            Snackbar.make(it, "Article saved successfully", Snackbar.LENGTH_SHORT).show()
+
+
+//            val sendIntent = Intent()
+//            sendIntent.action = Intent.ACTION_SEND
+//            sendIntent.putExtra(
+//                Intent.EXTRA_TEXT,
+//                "Hey check out my app at: https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID
+//            )
+//            sendIntent.type = "text/plain"
+//            startActivity(sendIntent)
         }
 
     }
