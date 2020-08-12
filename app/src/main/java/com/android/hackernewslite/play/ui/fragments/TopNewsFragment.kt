@@ -213,7 +213,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
     override fun onRefresh() {
         viewModel.getTopStores()
-        view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_LONG).show() }
+        view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_SHORT).show() }
 
         val handler = Handler()
         handler.postDelayed({

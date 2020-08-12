@@ -31,6 +31,7 @@ import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH
 import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.Resource
 import com.android.hackernewslite.play.util.SharePreferenceUtil
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_job_news.*
 
 /*
@@ -191,6 +192,7 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
 
     override fun onRefresh() {
         viewModel.getJobStories()
+        view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_SHORT).show() }
 
         val handler = Handler()
         handler.postDelayed({ //hide the loading screen after 3 secs

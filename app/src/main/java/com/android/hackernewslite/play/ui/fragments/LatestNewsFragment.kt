@@ -31,6 +31,7 @@ import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH
 import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.Resource
 import com.android.hackernewslite.play.util.SharePreferenceUtil
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_latest_news.*
 
 
@@ -182,15 +183,15 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
 
     override fun onQueryTextChange(newText: String): Boolean {
         hackerFeedAdapter.filter(if (newText.length >= QUERY_SIZE_LIMIT) newText else null)
-
         return true
     }
 
     override fun onRefresh() {
         viewModel.getNewStories()
+        view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_SHORT).show() }
 
         val handler = Handler()
-        handler.postDelayed({ //hide the loading screen after 3 secs
+        handler.postDelayed({ //hide the loading screen after 2 secs
             swipeRefresh?.isRefreshing = false
         }, SWIPE_TO_REFRESH_DELAY)
     }
