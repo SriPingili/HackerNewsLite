@@ -1,14 +1,17 @@
 package com.android.hackernewslite.play.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.hackernewslite.play.model.HackerStory
 import com.android.hackernewslite.play.repository.HackerFeedRepository
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall
 import com.android.hackernewslite.play.util.Constants.Companion.HOT_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.JOB_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.NEW_STORY_TYPE
 import com.android.hackernewslite.play.util.Resource
+import com.android.hackernewslite.play.util.SharePreferenceUtil
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -27,6 +30,10 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     val newStoryResponse = ArrayList<HackerStory>()
     val jobStoryResponse = ArrayList<HackerStory>()
 
+    var initialTopResponseSize = 0
+    var responseCounter = 0
+    var apiCallStatus = ResponseCall.COMPLETED_SUCCESSFULLY
+
     init {
         getTopStores()
         getNewStories()
@@ -35,6 +42,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     }
 
     fun getTopStores() = viewModelScope.launch() {
+        apiCallStatus = ResponseCall.IN_PROGRESS
         topStoriesLiveData.postValue(Resource.Loading())
 
         val response = hackerFeedRepository.getTopStories()
@@ -42,8 +50,14 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     }
 
     private fun handleTopStoriesResponse(response: Response<List<Int>>): Resource<List<Int>> {
+        apiCallStatus = ResponseCall.COMPLETED_SUCCESSFULLY
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
+                responseCounter = 0
+                topStoryResponse.clear()
+
+                initialTopResponseSize = hackerFeedResponse.size
+//                Log.v("zzzzzzzz", "Size of response from api call  = ${hackerFeedResponse.size} ")
 
                 for (id in hackerFeedResponse) {
                     fetchStoryBydId(id)
@@ -67,6 +81,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     }
 
     private fun handleHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
+        responseCounter++
         if (response.isSuccessful) {
             response.body()?.let { hackerStoryResponse ->
                 hackerStoryResponse.storyType = HOT_STORY_TYPE
@@ -76,21 +91,6 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         }
 
         return Resource.Error(response.message())
-    }
-
-    fun updateTopStoryLiveData(hackerStory: HackerStory) {
-        val response = topStoryResponse.find {
-            it.id == hackerStory.id
-        }
-
-        if (response != null) {
-            val index = topStoryResponse.indexOf(response)
-            topStoryResponse.remove(response)
-
-            topStoryResponse.add(index, hackerStory)
-
-            topStoryLiveData.postValue(Resource.Success(topStoryResponse))
-        }
     }
 
     fun getNewStories() = viewModelScope.launch() {

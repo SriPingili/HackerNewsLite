@@ -25,6 +25,8 @@ import com.android.hackernewslite.play.extensions.initialize
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
+import com.android.hackernewslite.play.util.Constants
+import com.android.hackernewslite.play.util.Constants.Companion.AppFlow
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.android.hackernewslite.play.util.Constants.Companion.shouldOpenInCustomTabs
@@ -40,11 +42,12 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     lateinit var viewModel: HackerFeedViewModel
     lateinit var hackerFeedAdapter: HackerFeedAdapter
     lateinit var customTabsUtil: CustomTabsUtil
+    lateinit var appFlow: AppFlow
     val TAG = "BreakingNewsFragment"
 
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
-    val args:TopNewsFragmentArgs by navArgs()
+    val args: TopNewsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,43 +55,61 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         setUpRecyclerView()
         customTabsUtil = CustomTabsUtil(context!!)
         (activity as HackerFeedActivity).ShowBotomNav()
+        appFlow = AppFlow.FIRST_TIME
 
         val result = args.isFromSplashScreen
 
-        if(result){
-            Snackbar.make(view,"Syncing...", Snackbar.LENGTH_LONG).show()
+        val savedResponse = SharePreferenceUtil.getTopHackerStoriesToSharedPres(context!!)
+
+        if (savedResponse.size > 0) {
+            Log.v("zzzzzzzz", "Size of saved items = ${savedResponse.size} ")
+            appFlow = AppFlow.IS_UPDATING_IN_BACKGROUND
+            hackerFeedAdapter.submitList(savedResponse)
         }
+
+        if (result) {
+            Snackbar.make(view, "Syncing...", Snackbar.LENGTH_LONG).show()
+        }
+//        else {
+//            if (result) {
+//                Snackbar.make(view, "Syncing...", Snackbar.LENGTH_LONG).show()
+//            }
+//        }
+
 
         setHasOptionsMenu(true)
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                activity?.getFragmentManager()?.popBackStack()
-                val intent = Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context!!.startActivity(intent);
-            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.getFragmentManager()?.popBackStack()
+                    val intent = Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context!!.startActivity(intent);
+                }
 
-        })
+            })
 
         swipeRefresh.initialize(this)
 
         hackerFeedAdapter.setOnItemClickListener {
 
-            if(it.url.isNullOrBlank()){
-                Toast.makeText(context,"Cannot open this page",Toast.LENGTH_SHORT).show()
+            if (it.url.isNullOrBlank()) {
+                Toast.makeText(context, "Cannot open this page", Toast.LENGTH_SHORT).show()
                 return@setOnItemClickListener
             }
 
-            if(SharePreferenceUtil.getCustomTabsPreferenceStatus(context!!)){
+            if (SharePreferenceUtil.getCustomTabsPreferenceStatus(context!!)) {
                 customTabsUtil.setToUseBackArrow()
                 customTabsUtil.openCustomTab(it.url)
-            }
-
-            else {
+            } else {
                 val bundle = Bundle().apply {
-                    putSerializable("article_arg", it)//this needs to be same as in news_nav_graph.xml
+                    putSerializable(
+                        "article_arg",
+                        it
+                    )//this needs to be same as in news_nav_graph.xml
                 }
 
                 findNavController().navigate(
@@ -100,7 +121,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
         hackerFeedAdapter.setOnImageClickListener {
             if (it?.isImageSaved!!) {
-                Toast.makeText(context,"Story saved successfully.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Story saved successfully.", Toast.LENGTH_SHORT).show()
                 viewModel.saveStory(it)
             } else {
                 viewModel.deleteStory(it)
@@ -135,7 +156,30 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
                 is Resource.Success -> {
                     resourceResponse.data?.let { hackerStory ->
-                        hackerFeedAdapter.submitList(hackerStory.toList())
+//                        Log.v(
+//                            "zzzzzzzz",
+//                            "responseCounter size = ${viewModel.responseCounter} and viewModel.initialTopResponseSize = ${viewModel.initialTopResponseSize}" +
+//                                    "and current response size = ${hackerStory.size}"
+//                        )
+
+                        when (appFlow) {
+                            AppFlow.IS_UPDATING_IN_BACKGROUND -> {
+                                if (viewModel.responseCounter >= viewModel.initialTopResponseSize) {
+                                    Log.v(
+                                        "zzzzzzzz",
+                                        "responseCounter size = ${viewModel.responseCounter} and viewModel.initialTopResponseSize = ${viewModel.initialTopResponseSize}"
+                                    )
+//                                    Snackbar.make(view, "Syncing...", Snackbar.LENGTH_SHORT).show()
+                                    hackerFeedAdapter.submitList(hackerStory.toList())
+                                }
+                            }
+
+                            AppFlow.FIRST_TIME -> {
+                                hackerFeedAdapter.submitList(hackerStory.toList())
+                            }
+                        }
+
+                        SharePreferenceUtil.saveTopHackerStoriesToSharedPres(hackerStory, context!!)
                     }
                 }
 
@@ -170,7 +214,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settings_id) {
-            startActivity(Intent(context,SettingsActivity::class.java))
+            startActivity(Intent(context, SettingsActivity::class.java))
             return true
         }
 
@@ -213,13 +257,15 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     }
 
     override fun onRefresh() {
-        viewModel.getTopStores()
-        view?.let { Snackbar.make(it,"Syncing...", Snackbar.LENGTH_SHORT).show() }
-
-        val handler = Handler()
-        handler.postDelayed({ //hide the loading screen after 30 secs if no cloud-session cookie
-            swipeRefresh?.isRefreshing = false
-        }, SWIPE_TO_REFRESH_DELAY)
+        appFlow = AppFlow.IS_UPDATING_IN_BACKGROUND
+        if (viewModel.apiCallStatus.equals(Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY)) {
+            viewModel.getTopStores()
+            Snackbar.make(view!!, "Syncing...", Snackbar.LENGTH_LONG).show()
+            val handler = Handler()
+            handler.postDelayed({ //hide the loading screen after 30 secs if no cloud-session cookie
+                swipeRefresh?.isRefreshing = false
+            }, SWIPE_TO_REFRESH_DELAY)
+        }
     }
 
 
