@@ -27,6 +27,8 @@ import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
 import com.android.hackernewslite.play.util.Constants
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.IN_PROGRESS
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.Resource
@@ -34,6 +36,7 @@ import com.android.hackernewslite.play.util.SharePreferenceUtil
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_job_news.*
 import kotlinx.android.synthetic.main.fragment_job_news.swipeRefresh
+import kotlinx.android.synthetic.main.fragment_latest_news.*
 
 
 class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQueryTextListener,
@@ -44,6 +47,7 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
     lateinit var customTabsUtil: CustomTabsUtil
+    var apiCallStatus = COMPLETED_SUCCESSFULLY
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,13 +94,17 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
             Observer { resourceResponse -> //Resource<NewsResponse
                 when (resourceResponse) {
                     is Resource.Success -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                     }
 
                     is Resource.Error -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                         resourceResponse.message?.let { message ->
                             Toast.makeText(
                                 activity,
-                                "An error occured: $message",
+                                "An error occurred. Please try again",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -191,13 +199,16 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
     }
 
     override fun onRefresh() {
-        viewModel.getTopStores()
-        view?.let { Snackbar.make(it,"Syncing...", Snackbar.LENGTH_SHORT).show() }
+        if (apiCallStatus.equals(COMPLETED_SUCCESSFULLY)) {
+            viewModel.getJobStories()
+            apiCallStatus = IN_PROGRESS
+            view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_SHORT).show() }
 
-        val handler = Handler()
-        handler.postDelayed({ //hide the loading screen after 3 secs
-            swipeRefresh?.isRefreshing = false
-        }, SWIPE_TO_REFRESH_DELAY)
+            val handler = Handler()
+            handler.postDelayed({ //hide the loading screen after 3 secs
+                swipeRefresh?.isRefreshing = false
+            }, SWIPE_TO_REFRESH_DELAY)
+        }
     }
 
 

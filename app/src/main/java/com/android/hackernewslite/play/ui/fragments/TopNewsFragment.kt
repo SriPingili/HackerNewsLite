@@ -30,6 +30,8 @@ import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
 import com.android.hackernewslite.play.util.Constants
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.IN_PROGRESS
 import com.android.hackernewslite.play.util.Constants.Companion.AppFlow
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
@@ -40,6 +42,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
 
+
 class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQueryTextListener,
     SwipeRefreshLayout.OnRefreshListener {
     lateinit var viewModel: HackerFeedViewModel
@@ -47,6 +50,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     lateinit var customTabsUtil: CustomTabsUtil
     lateinit var appFlow: AppFlow
     val TAG = "BreakingNewsFragment"
+    var apiCallStatus = COMPLETED_SUCCESSFULLY
 
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
@@ -142,13 +146,17 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
             Observer { resourceResponse -> //Resource<NewsResponse
                 when (resourceResponse) {
                     is Resource.Success -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                     }
 
                     is Resource.Error -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                         resourceResponse.message?.let { message ->
                             Toast.makeText(
                                 activity,
-                                "An error occured: $message",
+                                "An error occurred. Please try again",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -165,11 +173,11 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
                 is Resource.Success -> {
                     resourceResponse.data?.let { hackerStory ->
-//                        Log.v(
-//                            "zzzzzzzz",
-//                            "responseCounter size = ${viewModel.responseCounter} and viewModel.initialTopResponseSize = ${viewModel.initialTopResponseSize}" +
-//                                    "and current response size = ${hackerStory.size}"
-//                        )
+                        Log.v(
+                            "zzzzzzzz",
+                            "responseCounter size = ${viewModel.responseCounter} and viewModel.initialTopResponseSize = ${viewModel.initialTopResponseSize}" +
+                                    "and current response size = ${hackerStory.size}"
+                        )
 
                         when (appFlow) {
                             AppFlow.IS_UPDATING_IN_BACKGROUND -> {
@@ -268,11 +276,12 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
     override fun onRefresh() {
         appFlow = AppFlow.IS_UPDATING_IN_BACKGROUND
-        if (viewModel.apiCallStatus.equals(Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY)) {
+        if (apiCallStatus.equals(COMPLETED_SUCCESSFULLY)) {
             viewModel.getTopStores()
+            apiCallStatus = IN_PROGRESS
             Snackbar.make(view!!, "Syncing...", Snackbar.LENGTH_LONG).show()
             val handler = Handler()
-            handler.postDelayed({ //hide the loading screen after 30 secs if no cloud-session cookie
+            handler.postDelayed({
                 swipeRefresh?.isRefreshing = false
             }, SWIPE_TO_REFRESH_DELAY)
         }

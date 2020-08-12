@@ -26,6 +26,8 @@ import com.android.hackernewslite.play.extensions.initialize
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.IN_PROGRESS
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.android.hackernewslite.play.util.CustomTabsUtil
@@ -44,6 +46,7 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
     lateinit var customTabsUtil: CustomTabsUtil
+    var apiCallStatus = COMPLETED_SUCCESSFULLY
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,16 +58,15 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
 
         latestHackerFeedAdapter.setOnItemClickListener {
 
-            if(it.url.isNullOrBlank()){
-                Toast.makeText(context,"Cannot open this page",Toast.LENGTH_SHORT).show()
+            if (it.url.isNullOrBlank()) {
+                Toast.makeText(context, "Cannot open this page", Toast.LENGTH_SHORT).show()
                 return@setOnItemClickListener
             }
 
-            if(SharePreferenceUtil.getCustomTabsPreferenceStatus(context!!)){
+            if (SharePreferenceUtil.getCustomTabsPreferenceStatus(context!!)) {
                 customTabsUtil.setToUseBackArrow()
                 customTabsUtil.openCustomTab(it.url)
-            }
-            else {
+            } else {
                 val bundle = Bundle().apply {
                     putSerializable(
                         "article_arg",
@@ -92,13 +94,17 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
             Observer { resourceResponse -> //Resource<NewsResponse
                 when (resourceResponse) {
                     is Resource.Success -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                     }
 
                     is Resource.Error -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                         resourceResponse.message?.let { message ->
                             Toast.makeText(
                                 activity,
-                                "An error occured: $message",
+                                "An error occurred. Please try again",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -191,13 +197,16 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
     }
 
     override fun onRefresh() {
-        viewModel.getTopStores()
-        view?.let { Snackbar.make(it,"Syncing...", Snackbar.LENGTH_SHORT).show() }
+        if (apiCallStatus.equals(COMPLETED_SUCCESSFULLY)) {
+            viewModel.getNewStories()
+            apiCallStatus = IN_PROGRESS
+            view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_SHORT).show() }
+            val handler = Handler()
+            handler.postDelayed({ //hide the loading screen after 2 secs
+                swipeRefresh?.isRefreshing = false
+            }, SWIPE_TO_REFRESH_DELAY)
 
-        val handler = Handler()
-        handler.postDelayed({ //hide the loading screen after 3 secs
-            swipeRefresh?.isRefreshing = false
-        }, SWIPE_TO_REFRESH_DELAY)
+        }
     }
 
 
