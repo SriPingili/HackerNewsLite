@@ -1,6 +1,5 @@
 package com.android.hackernewslite.play.ui.fragments
 
-import android.app.ActivityOptions
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -29,9 +28,10 @@ import com.android.hackernewslite.play.extensions.initialize
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
-import com.android.hackernewslite.play.util.Constants
 import com.android.hackernewslite.play.util.Constants.Companion.AppFlow
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.IN_PROGRESS
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.Resource
@@ -51,8 +51,9 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     lateinit var customTabsUtil: CustomTabsUtil
     val args: TopNewsFragmentArgs by navArgs()
     lateinit var appFlow: AppFlow
-    val TAG = "TopNewsFragment"
+    var apiCallStatus = COMPLETED_SUCCESSFULLY
     var result = false
+    val TAG = "TopNewsFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,9 +133,13 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
             Observer { resourceResponse -> //Resource<NewsResponse
                 when (resourceResponse) {
                     is Resource.Success -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                     }
 
                     is Resource.Error -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                         resourceResponse.message?.let { message ->
                             Log.v(TAG, "An error occured: $message")
                         }
@@ -200,7 +205,6 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settings_id) {
             startActivity(Intent(context, SettingsActivity::class.java))
-//            activity?.overridePendingTransition(0, R.anim.slide_in_right)
             return true
         }
 
@@ -243,8 +247,9 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
     override fun onRefresh() {
         appFlow = AppFlow.IS_UPDATING_IN_BACKGROUND
-        if (viewModel.apiCallStatus.equals(Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY)) {
+        if (apiCallStatus.equals(COMPLETED_SUCCESSFULLY)) {
             viewModel.getTopStores()
+            apiCallStatus = IN_PROGRESS
             Snackbar.make(view!!, "Syncing...", Snackbar.LENGTH_LONG).show()
             val handler = Handler()
             handler.postDelayed({

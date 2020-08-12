@@ -8,7 +8,6 @@ import com.android.hackernewslite.play.repository.HackerFeedRepository
 import com.android.hackernewslite.play.util.Constants.Companion.HOT_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.JOB_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.NEW_STORY_TYPE
-import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall
 import com.android.hackernewslite.play.util.Resource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -32,7 +31,6 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
 
     var initialTopResponseSize = 0
     var responseCounter = 0
-    var apiCallStatus = ResponseCall.COMPLETED_SUCCESSFULLY
 
     init {
         getTopStores()
@@ -44,7 +42,6 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     Fetches the top stories by calling the hacker news api
     * */
     fun getTopStores() = viewModelScope.launch() {
-        apiCallStatus = ResponseCall.IN_PROGRESS
         topStoriesLiveData.postValue(Resource.Loading())
 
         val response = hackerFeedRepository.getTopStories()
@@ -53,7 +50,6 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     }
 
     private fun handleTopStoriesResponse(response: Response<List<Int>>): Resource<List<Int>> {
-        apiCallStatus = ResponseCall.COMPLETED_SUCCESSFULLY
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
                 responseCounter = 0
@@ -66,7 +62,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
                     fetchTopStoryById(id)
                 }
 
-                return Resource.Success(hackerFeedResponse)
+                return Resource.Success(newResponse)
             }
         }
 
@@ -109,11 +105,13 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleNewStoriesResponse(response: Response<List<Int>>): Resource<List<Int>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
-                for (id in hackerFeedResponse.take(200)) {
+                val newResponse = hackerFeedResponse.take(250)
+
+                for (id in newResponse) {
                     fetchNewStoryById(id)
                 }
 
-                return Resource.Success(hackerFeedResponse)
+                return Resource.Success(newResponse)
             }
         }
 
@@ -155,11 +153,13 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleJobStoriesResponse(response: Response<List<Int>>): Resource<List<Int>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
-                for (id in hackerFeedResponse.take(200)) {
+                val newResponse = hackerFeedResponse.take(250)
+
+                for (id in newResponse) {
                     fetchJobStoryById(id)
                 }
 
-                return Resource.Success(hackerFeedResponse)
+                return Resource.Success(newResponse)
             }
         }
 
@@ -186,6 +186,10 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
 
         return Resource.Error(response.message())
     }
+
+    /*
+    Room Queries
+    */
 
     fun getAllSavedStories() = hackerFeedRepository.getAllSavedNews()
 

@@ -27,6 +27,8 @@ import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
 import com.android.hackernewslite.play.util.Constants
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY
+import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.IN_PROGRESS
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.Resource
@@ -45,6 +47,7 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
     private var searchView: SearchView? = null
     lateinit var customTabsUtil: CustomTabsUtil
     val TAG = "JobNewsFragment"
+    var apiCallStatus = COMPLETED_SUCCESSFULLY
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,9 +94,13 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
             Observer { resourceResponse -> //Resource<NewsResponse
                 when (resourceResponse) {
                     is Resource.Success -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                     }
 
                     is Resource.Error -> {
+                        apiCallStatus = COMPLETED_SUCCESSFULLY
+                        swipeRefresh?.isRefreshing = false
                         resourceResponse.message?.let { message ->
                             Log.v(TAG, "An error occured: $message")
                         }
@@ -191,12 +198,15 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
     }
 
     override fun onRefresh() {
-        viewModel.getJobStories()
-        view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_SHORT).show() }
+        if (apiCallStatus.equals(COMPLETED_SUCCESSFULLY)) {
+            viewModel.getJobStories()
+            apiCallStatus = IN_PROGRESS
+            view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_SHORT).show() }
 
-        val handler = Handler()
-        handler.postDelayed({ //hide the loading screen after 3 secs
-            swipeRefresh?.isRefreshing = false
-        }, SWIPE_TO_REFRESH_DELAY)
+            val handler = Handler()
+            handler.postDelayed({ //hide the loading screen after 3 secs
+                swipeRefresh?.isRefreshing = false
+            }, SWIPE_TO_REFRESH_DELAY)
+        }
     }
 }
