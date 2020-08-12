@@ -24,5 +24,17 @@ class Constants {
         const val PASSWORD = "9885887571"
 
         var shouldOpenInCustomTabs = false
+
+        const val HOT_STORY_RESPONSE_TYPE = "hot_story_response"
+        const val NEW_STORY_RESPONSE_TYPE = "new_story_response"
+        const val JOB_STORY_RESPONSE_TYPE = "job_story_response"
+
+        enum class AppFlow {
+            FIRST_TIME, IS_UPDATING_IN_BACKGROUND
+        }
+
+        enum class ResponseCall {
+            IN_PROGRESS, COMPLETED_SUCCESSFULLY
+        }
     }
 }

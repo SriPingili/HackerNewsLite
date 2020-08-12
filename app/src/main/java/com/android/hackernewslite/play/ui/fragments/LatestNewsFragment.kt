@@ -44,8 +44,8 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
     lateinit var hackerFeedAdapter: HackerFeedAdapter
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
-    val TAG = "LatestNewsFragment"
     lateinit var customTabsUtil: CustomTabsUtil
+    val TAG = "LatestNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

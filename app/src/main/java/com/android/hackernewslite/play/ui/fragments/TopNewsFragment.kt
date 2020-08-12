@@ -28,6 +28,8 @@ import com.android.hackernewslite.play.extensions.initialize
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
+import com.android.hackernewslite.play.util.Constants
+import com.android.hackernewslite.play.util.Constants.Companion.AppFlow
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
 import com.android.hackernewslite.play.util.CustomTabsUtil
@@ -46,8 +48,9 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
     lateinit var customTabsUtil: CustomTabsUtil
-    val TAG = "BreakingNewsFragment"
     val args: TopNewsFragmentArgs by navArgs()
+    lateinit var appFlow: AppFlow
+    val TAG = "TopNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,8 +58,16 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         setUpRecyclerView()
         (activity as HackerFeedActivity).showBottomNavAndActionBar()
         customTabsUtil = CustomTabsUtil(context!!)
+        appFlow = AppFlow.FIRST_TIME
 
         val result = args.isFromSplashScreen
+
+        val savedResponse = SharePreferenceUtil.getTopHackerStoriesToSharedPres(context!!)
+
+        if (savedResponse.size > 0) {
+            appFlow = AppFlow.IS_UPDATING_IN_BACKGROUND
+            hackerFeedAdapter.submitList(savedResponse)
+        }
 
         if (result) {
             Snackbar.make(view, "Syncing...", Snackbar.LENGTH_LONG).show()
@@ -75,7 +86,10 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context!!.startActivity(intent);
                 }
+
             })
+
+        swipeRefresh.initialize(this)
 
         hackerFeedAdapter.setOnItemClickListener {
             if (it.url.isNullOrBlank()) {
@@ -133,7 +147,19 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
                 is Resource.Success -> {
                     resourceResponse.data?.let { hackerStory ->
-                        hackerFeedAdapter.submitList(hackerStory.toList())
+                        when (appFlow) {
+                            AppFlow.IS_UPDATING_IN_BACKGROUND -> {
+                                if (viewModel.responseCounter >= viewModel.initialTopResponseSize) {
+                                    hackerFeedAdapter.submitList(hackerStory.toList())
+                                }
+                            }
+
+                            AppFlow.FIRST_TIME -> {
+                                hackerFeedAdapter.submitList(hackerStory.toList())
+                            }
+                        }
+
+                        SharePreferenceUtil.saveTopHackerStoriesToSharedPres(hackerStory, context!!)
                     }
                 }
 
@@ -212,12 +238,14 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     }
 
     override fun onRefresh() {
-        viewModel.getTopStores()
-        view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_SHORT).show() }
-
-        val handler = Handler()
-        handler.postDelayed({
-            swipeRefresh?.isRefreshing = false
-        }, SWIPE_TO_REFRESH_DELAY)
+        appFlow = AppFlow.IS_UPDATING_IN_BACKGROUND
+        if (viewModel.apiCallStatus.equals(Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY)) {
+            viewModel.getTopStores()
+            Snackbar.make(view!!, "Syncing...", Snackbar.LENGTH_LONG).show()
+            val handler = Handler()
+            handler.postDelayed({
+                swipeRefresh?.isRefreshing = false
+            }, SWIPE_TO_REFRESH_DELAY)
+        }
     }
 }

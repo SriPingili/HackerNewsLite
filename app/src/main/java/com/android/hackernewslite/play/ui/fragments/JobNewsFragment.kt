@@ -41,10 +41,10 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news), SearchView.OnQuery
     SwipeRefreshLayout.OnRefreshListener {
     lateinit var viewModel: HackerFeedViewModel
     lateinit var hackerFeedAdapter: HackerFeedAdapter
-    val TAG = "JobNewsFragment"
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
     lateinit var customTabsUtil: CustomTabsUtil
+    val TAG = "JobNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

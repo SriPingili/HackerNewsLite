@@ -2,14 +2,18 @@ package com.android.hackernewslite.play.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.android.hackernewslite.play.model.HackerStory
+import com.android.hackernewslite.play.util.Constants.Companion.HOT_STORY_RESPONSE_TYPE
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
 
 
 class SharePreferenceUtil {
 
     companion object {
+        fun getGson(): Gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+
         private fun getSharedPreferences(context: Context): SharedPreferences {
             return context.getSharedPreferences(Constants.PREFS_KEY, Context.MODE_PRIVATE)
         }
@@ -32,41 +36,25 @@ class SharePreferenceUtil {
                 .putBoolean(Constants.CUSTOM_TABS_PREFS, status).apply()
         }
 
+        fun saveTopHackerStoriesToSharedPres(stories: List<HackerStory>, context: Context) {
+            val gson = getGson()
+            val listType = object : TypeToken<List<HackerStory>>() {}.type
 
-        /**
-         * returns the list of saved item id's
-         *
-         * @param context - the context of the calling activity
-         * @return the list of saved items
-         */
-        fun getSavedStoryIds(context: Context): ArrayList<Int> {
-            val gson = Gson()
-            val json: String? =
-                getSharedPreferences(context).getString(Constants.SAVED_ITEMS_ID, "")
-            val type: Type = object : TypeToken<ArrayList<Int>>() {}.type
-            return if (json!!.isEmpty()) {
+            getSharedPreferences(context).edit()
+                .putString(HOT_STORY_RESPONSE_TYPE, gson.toJson(stories, listType)).apply()
+        }
+
+        fun getTopHackerStoriesToSharedPres(context: Context): ArrayList<HackerStory> {
+            val gson = getGson()
+            val listType = object : TypeToken<List<HackerStory>>() {}.type
+
+            val jsonString = getSharedPreferences(context).getString(HOT_STORY_RESPONSE_TYPE, "")
+
+            return if (jsonString!!.isEmpty()) {
                 ArrayList()
-            } else gson.fromJson(json, type)
-        }
-
-        fun saveStoryId(requestCode: Int, context: Context) {
-            val requestCodes = getSavedStoryIds(context)
-            if (!requestCodes.contains(requestCode)) {
-                requestCodes.add(requestCode)
+            } else {
+                gson.fromJson(jsonString, listType)
             }
-            val gson = Gson()
-            val json = gson.toJson(requestCodes)
-            getSharedPreferences(context).edit().putString(Constants.SAVED_ITEMS_ID, json).apply()
-        }
-
-        fun removeStoryId(requestCode: Int, context: Context) {
-            val requestCodes = getSavedStoryIds(context)
-            if (requestCodes.contains(requestCode)) {
-                requestCodes.remove(requestCode)
-            }
-            val gson = Gson()
-            val json = gson.toJson(requestCodes)
-            getSharedPreferences(context).edit().putString(Constants.SAVED_ITEMS_ID, json).apply()
         }
 
     }
