@@ -1,5 +1,6 @@
 package com.android.thenewsapp.ui.fragments
 
+import android.app.ActivityOptions
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -7,7 +8,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
 import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -29,7 +33,6 @@ import com.android.hackernewslite.play.util.Constants
 import com.android.hackernewslite.play.util.Constants.Companion.AppFlow
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.SWIPE_TO_REFRESH_DELAY
-import com.android.hackernewslite.play.util.Constants.Companion.shouldOpenInCustomTabs
 import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.Resource
 import com.android.hackernewslite.play.util.SharePreferenceUtil
@@ -221,6 +224,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settings_id) {
             startActivity(Intent(context, SettingsActivity::class.java))
+//            activity?.overridePendingTransition(0, R.anim.slide_in_right)
             return true
         }
 

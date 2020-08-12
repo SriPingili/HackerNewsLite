@@ -56,10 +56,11 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
                 responseCounter = 0
                 topStoryResponse.clear()
 
-                initialTopResponseSize = hackerFeedResponse.size
+                val newResponse = hackerFeedResponse.take(250)
+                initialTopResponseSize = newResponse.size
 //                Log.v("zzzzzzzz", "Size of response from api call  = ${hackerFeedResponse.size} ")
 
-                for (id in hackerFeedResponse) {
+                for (id in newResponse) {
                     fetchStoryBydId(id)
                 }
 
@@ -104,7 +105,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
                 val time = measureTimeMillis {
-                    for (id in hackerFeedResponse) {
+                    for (id in hackerFeedResponse.take(200)) {
                         fetchNewStoryById(id)
                     }
                 }
@@ -163,7 +164,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
                 val time = measureTimeMillis {
-                    for (id in hackerFeedResponse) {
+                    for (id in hackerFeedResponse.take(200)) {
                         fetchJobStoryById(id)
                     }
                 }

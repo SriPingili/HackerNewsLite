@@ -62,6 +62,23 @@
             android:name="article_arg"
             app:argType="com.android.hackernewslite.play.model.HackerStory" />
     </fragment>
+    <!--
+
+    https://stackoverflow.com/a/55216276
+
+    I think the key to this answer lies in that the "popUpTo" (which removes all fragments between your current fragment
+    and the first occurrence of the id that you pass to this argument) is set to the id of the navigation graph itself.
+    Effectively completely clearing the backstack. Only adding this comment because I haven't seen it explained exactly like this,
+    and it was what I was looking for. +1!
+
+     app:popUpToInclusive="true" includes the fragment in popUpTo,
+
+     app:popUpTo="@id/splashScreenFragment"
+            app:popUpToInclusive="true"
+
+     these 2 lines effectively remove splashScreenFragment from backstack
+     -->
+
     <fragment
         android:id="@+id/splashScreenFragment"
         android:name="com.android.hackernewslite.play.ui.fragments.SplashScreenFragment"
