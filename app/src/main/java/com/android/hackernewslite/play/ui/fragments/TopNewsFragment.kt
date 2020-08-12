@@ -48,6 +48,12 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
     val args: TopNewsFragmentArgs by navArgs()
+    var result = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        result = args.isFromSplashScreen
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,7 +63,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         (activity as HackerFeedActivity).ShowBotomNav()
         appFlow = AppFlow.FIRST_TIME
 
-        val result = args.isFromSplashScreen
+
 
         val savedResponse = SharePreferenceUtil.getTopHackerStoriesToSharedPres(context!!)
 
@@ -268,5 +274,8 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         }
     }
 
-
+    override fun onPause() {
+        super.onPause()
+        result = false
+    }
 }
