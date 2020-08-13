@@ -10,6 +10,7 @@ import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Resource
+import com.androideveloper.thenewsapp.adapter.HackerFeedAdapter
 import kotlinx.android.synthetic.main.fragment_latest_news.*
 
 /*
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_latest_news.*
 class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
     lateinit var viewModel: HackerFeedViewModel
     val TAG = "LatestNewsFragment"
+    lateinit var hackerFeedAdapter: HackerFeedAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +50,24 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
                 }
 
             })
+
+        viewModel.newStoryLiveData.observe(viewLifecycleOwner, Observer { resourceResponse ->
+            when (resourceResponse) {
+                is Resource.Success -> {
+                    resourceResponse.data?.let {
+                        hackerFeedAdapter.differ.submitList(it.toList())
+                    }
+                }
+
+                is Resource.Error -> {
+                    resourceResponse.message?.let { message ->
+                        Log.v(TAG, "An error occured: $message")
+                    }
+                }
+                is Resource.Loading -> {
+                }
+            }
+        })
     }
 
     /*
@@ -68,9 +88,10 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
     helper method that sets up the recycler view
     * */
     fun setUpRecyclerView() {
+        hackerFeedAdapter = HackerFeedAdapter()
         rvLatestNews.apply {
+            adapter = hackerFeedAdapter
             layoutManager = LinearLayoutManager(activity)
-            //TODO setup this
         }
     }
 }

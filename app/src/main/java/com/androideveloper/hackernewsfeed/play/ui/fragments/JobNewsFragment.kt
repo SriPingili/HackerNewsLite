@@ -10,6 +10,7 @@ import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Resource
+import com.androideveloper.thenewsapp.adapter.HackerFeedAdapter
 import kotlinx.android.synthetic.main.fragment_job_news.*
 
 /*
@@ -17,7 +18,8 @@ import kotlinx.android.synthetic.main.fragment_job_news.*
 * */
 class JobNewsFragment : Fragment(R.layout.fragment_job_news) {
     lateinit var viewModel: HackerFeedViewModel
-    val TAG = "BreakingNewsFragment"
+    lateinit var hackerFeedAdapter: HackerFeedAdapter
+    val TAG = "JobNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +50,27 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news) {
                 }
 
             })
+
+        viewModel.jobStoryLiveData.observe(viewLifecycleOwner, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+                    resourceResponse.data?.let {
+                        hackerFeedAdapter.differ.submitList(it.toList())
+                    }
+                }
+
+                is Resource.Error -> {
+                    resourceResponse.message?.let { message ->
+                        Log.v(TAG, "An error occured: $message")
+                    }
+                }
+
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
     }
 
     /*
@@ -68,9 +91,10 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news) {
     helper method that sets up the recycler view
     * */
     fun setUpRecyclerView() {
+        hackerFeedAdapter = HackerFeedAdapter()
         rvJobNews.apply {
+            adapter = hackerFeedAdapter
             layoutManager = LinearLayoutManager(activity)
-
         }
     }
 }

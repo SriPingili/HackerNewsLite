@@ -9,16 +9,22 @@ import com.androideveloper.hackernewsfeed.play.util.Resource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import kotlin.system.measureTimeMillis
 
 class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : ViewModel() {
+    //the live data object for the id's of all stories (Top stories, Job Stories, New stories)
     val topStoriesLiveData: MutableLiveData<Resource<List<Int>>> = MutableLiveData();
     val newStoriesLiveData: MutableLiveData<Resource<List<Int>>> = MutableLiveData();
     val jobStoriesLiveData: MutableLiveData<Resource<List<Int>>> = MutableLiveData();
 
-    val topStoryLiveData: MutableLiveData<Resource<HackerStory>> = MutableLiveData();
-    val newStoryLiveData: MutableLiveData<Resource<HackerStory>> = MutableLiveData();
-    val jobStoryLiveData: MutableLiveData<Resource<HackerStory>> = MutableLiveData();
+    //the live data object for individual story (Top story, Job Story, New story)
+    val topStoryLiveData: MutableLiveData<Resource<List<HackerStory>>> = MutableLiveData();
+    val newStoryLiveData: MutableLiveData<Resource<List<HackerStory>>> = MutableLiveData();
+    val jobStoryLiveData: MutableLiveData<Resource<List<HackerStory>>> = MutableLiveData();
+
+    //saves the response from api call and appends it each time
+    val topStoryResponse = ArrayList<HackerStory>()
+    val newStoryResponse = ArrayList<HackerStory>()
+    val jobStoryResponse = ArrayList<HackerStory>()
 
     init {
         getTopStores()
@@ -59,10 +65,12 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         topStoryLiveData.postValue(handleHackerStoryResponse(response.await()))
     }
 
-    private fun handleHackerStoryResponse(response: Response<HackerStory>): Resource<HackerStory> {
+    private fun handleHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerStoryResponse ->
-                return Resource.Success(hackerStoryResponse)
+
+                topStoryResponse.add(hackerStoryResponse)
+                return Resource.Success(topStoryResponse)
             }
         }
 
@@ -83,10 +91,8 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleNewStoriesResponse(response: Response<List<Int>>): Resource<List<Int>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
-                val time = measureTimeMillis {
-                    for (id in hackerFeedResponse.take(200)) {
-                        fetchNewStoryById(id)
-                    }
+                for (id in hackerFeedResponse.take(200)) {
+                    fetchNewStoryById(id)
                 }
 
                 return Resource.Success(hackerFeedResponse)
@@ -102,7 +108,19 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         val response = async {
             hackerFeedRepository.fetchStoryById(id)
         }
-        newStoryLiveData.postValue(handleHackerStoryResponse(response.await()))
+        newStoryLiveData.postValue(handleNewHackerStoryResponse(response.await()))
+    }
+
+    private fun handleNewHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
+        if (response.isSuccessful) {
+            response.body()?.let { hackerStoryResponse ->
+
+                newStoryResponse.add(hackerStoryResponse)
+                return Resource.Success(newStoryResponse)
+            }
+        }
+
+        return Resource.Error(response.message())
     }
 
     /*
@@ -136,6 +154,18 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
         val response = async {
             hackerFeedRepository.fetchStoryById(id)
         }
-        jobStoryLiveData.postValue(handleHackerStoryResponse(response.await()))
+        jobStoryLiveData.postValue(handleJobHackerStoryResponse(response.await()))
+    }
+
+    private fun handleJobHackerStoryResponse(response: Response<HackerStory>): Resource<List<HackerStory>> {
+        if (response.isSuccessful) {
+            response.body()?.let { hackerStoryResponse ->
+
+                jobStoryResponse.add(hackerStoryResponse)
+                return Resource.Success(jobStoryResponse)
+            }
+        }
+
+        return Resource.Error(response.message())
     }
 }

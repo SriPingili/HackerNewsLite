@@ -10,6 +10,7 @@ import com.androideveloper.hackernewsfeed.play.R
 import com.androideveloper.hackernewsfeed.play.ui.HackerFeedActivity
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Resource
+import com.androideveloper.thenewsapp.adapter.HackerFeedAdapter
 import kotlinx.android.synthetic.main.fragment_top_news.*
 
 /*
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_top_news.*
 * */
 class TopNewsFragment : Fragment(R.layout.fragment_top_news) {
     lateinit var viewModel: HackerFeedViewModel
+    lateinit var hackerFeedAdapter: HackerFeedAdapter
     val TAG = "BreakingNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,9 +32,6 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news) {
                 when (resourceResponse) {
                     is Resource.Success -> {
                         hideProgressBar()
-                        resourceResponse.data?.let { newsResponse ->
-                            //TODO implement this
-                        }
                     }
 
                     is Resource.Error -> {
@@ -47,6 +46,25 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news) {
                     }
                 }
             })
+
+        viewModel.topStoryLiveData.observe(viewLifecycleOwner, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+                    resourceResponse.data?.let { hackerStory ->
+                        hackerFeedAdapter.differ.submitList(hackerStory.toList())
+                    }
+                }
+
+                is Resource.Error -> {
+                    resourceResponse.message?.let { message ->
+                        Log.v(TAG, "An error occured: $message")
+                    }
+                }
+                is Resource.Loading -> {
+                }
+            }
+        })
     }
 
     /*
@@ -67,9 +85,10 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news) {
     helper method that sets up the recycler view
     * */
     fun setUpRecyclerView() {
+        hackerFeedAdapter = HackerFeedAdapter()
         rvTopNews.apply {
+            adapter = hackerFeedAdapter
             layoutManager = LinearLayoutManager(activity)
-            //TODO implment this
         }
     }
 }

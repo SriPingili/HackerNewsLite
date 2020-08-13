@@ -12,35 +12,34 @@
         android:id="@+id/scoreTextViewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
         android:background="@drawable/rounded_textview"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.483"
         tools:text="256" />
 
     <TextView
         android:id="@+id/titleTextViewId"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/urlTextViewId"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.061"
-        app:layout_constraintStart_toEndOf="@+id/scoreTextViewId"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        app:layout_constraintLeft_toRightOf="@+id/scoreTextViewId"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
-        tools:text="This is from Amazon and Netflix" />
+        tools:text="This is from Amazon and Netflix This is from Amazon and Netflix This is from Amazon and Netflix" />
 
     <TextView
         android:id="@+id/urlTextViewId"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="208dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/authorTextViewId"
+        android:layout_marginStart="8dp"
+        android:maxLines="1"
+
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/scoreTextViewId"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextViewId"
         tools:text="www.google.com" />
 
     <TextView
@@ -48,17 +47,16 @@
         android:layout_width="59dp"
         android:layout_height="14dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginTop="8dp"
         android:text="by Srijith"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/scoreTextViewId" />
+        app:layout_constraintStart_toEndOf="@+id/scoreTextViewId"
+        app:layout_constraintTop_toBottomOf="@+id/urlTextViewId" />
 
     <ImageView
         android:id="@+id/commentsLogoImageViewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/authorTextViewId"
         app:layout_constraintTop_toBottomOf="@+id/urlTextViewId"
         app:srcCompat="@drawable/ic_baseline_comment_24" />
