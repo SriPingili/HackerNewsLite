@@ -78,7 +78,7 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
             when (resourceResponse) {
                 is Resource.Success -> {
                     resourceResponse.data?.let {
-                        hackerFeedAdapter.differ.submitList(it.toList())
+                        hackerFeedAdapter.submitList(it.toList())
                     }
                 }
 

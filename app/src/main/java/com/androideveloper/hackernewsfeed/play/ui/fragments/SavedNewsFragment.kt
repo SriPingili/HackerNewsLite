@@ -50,12 +50,14 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
                     JOB_STORY_TYPE -> viewModel.updateJobStoryLiveData(it)
                 }
                 viewModel.deleteStory(it)
+                hackerFeedAdapter.notifyDataSetChanged()
             }
             Toast.makeText(context, "clicked ${it.isImageSaved}", Toast.LENGTH_SHORT).show()
         }
 
         viewModel.getAllSavedStories().observe(viewLifecycleOwner, Observer { hackerStories ->
-            hackerFeedAdapter.differ.submitList(hackerStories)
+            hackerFeedAdapter.submitList(hackerStories)
+            hackerFeedAdapter.notifyDataSetChanged()
         })
 
 
@@ -101,6 +103,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
         rvSavedNews.apply {
             adapter = hackerFeedAdapter
             layoutManager = LinearLayoutManager(activity)
+            itemAnimator = null
         }
     }
 }

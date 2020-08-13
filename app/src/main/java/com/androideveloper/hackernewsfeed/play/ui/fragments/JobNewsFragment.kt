@@ -79,7 +79,7 @@ class JobNewsFragment : Fragment(R.layout.fragment_job_news) {
 
                 is Resource.Success -> {
                     resourceResponse.data?.let {
-                        hackerFeedAdapter.differ.submitList(it.toList())
+                        hackerFeedAdapter.submitList(it.toList())
                     }
                 }
 
