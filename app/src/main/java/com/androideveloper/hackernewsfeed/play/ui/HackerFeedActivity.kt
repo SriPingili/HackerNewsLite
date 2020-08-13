@@ -1,9 +1,7 @@
 package com.androideveloper.hackernewsfeed.play.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.androideveloper.hackernewsfeed.play.R
@@ -11,6 +9,10 @@ import com.androideveloper.hackernewsfeed.play.repository.HackerFeedRepository
 import com.androideveloper.hackernewsfeed.play.ui.viewmodel.HackerFeedViewModel
 import com.androideveloper.hackernewsfeed.play.util.Resource
 
+/*
+ This is tthe launches activity that hosts all the
+ Fragments (Article, JobNews,LatestNews,SavedNews and TopNews fragments)
+* */
 class HackerFeedActivity : AppCompatActivity() {
     lateinit var viewModel: HackerFeedViewModel
 
@@ -26,51 +28,115 @@ class HackerFeedActivity : AppCompatActivity() {
             )
 
 
+        /*
+        TODO move the below observers to their respective fragments
+        * */
         viewModel.topStoriesLiveData.observe(this, Observer { resourceResponse ->
             when (resourceResponse) {
 
                 is Resource.Success -> {
-//                    hideProgressBar()
                     resourceResponse.data?.let {
-                        Log.v("zzzz", " size is " + it.size)
                     }
                 }
 
                 is Resource.Error -> {
-//                    hideProgressBar()
                     resourceResponse.message?.let { message ->
-                        Log.v("zzzz", " error = $message")
                     }
                 }
                 is Resource.Loading -> {
-//                    showProgressBar()
                 }
             }
 
         })
 
-        viewModel.hackerStoryLiveData.observe(this, Observer { resourceResponse ->
+        viewModel.topStoryLiveData.observe(this, Observer { resourceResponse ->
             when (resourceResponse) {
 
                 is Resource.Success -> {
-//                    hideProgressBar()
                     resourceResponse.data?.let {
-                        Log.v("zzzz", " size is " + it.title)
                     }
                 }
 
                 is Resource.Error -> {
-//                    hideProgressBar()
                     resourceResponse.message?.let { message ->
-                        Log.v("zzzz", " error = $message")
                     }
                 }
                 is Resource.Loading -> {
-//                    showProgressBar()
+                }
+            }
+        })
+
+
+        viewModel.newStoriesLiveData.observe(this, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+                    resourceResponse.data?.let {
+                    }
+                }
+
+                is Resource.Error -> {
+                    resourceResponse.message?.let { message ->
+                    }
+                }
+                is Resource.Loading -> {
+                }
+            }
+
+        })
+
+        viewModel.newStoryLiveData.observe(this, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+                    resourceResponse.data?.let {
+                        if (it.type.equals("story")) {
+                        }
+                    }
+                }
+
+                is Resource.Error -> {
+                    resourceResponse.message?.let { message ->
+                    }
+                }
+                is Resource.Loading -> {
+                }
+            }
+        })
+
+        viewModel.jobStoriesLiveData.observe(this, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+                    resourceResponse.data?.let {
+                    }
+                }
+
+                is Resource.Error -> {
+                    resourceResponse.message?.let { message ->
+                    }
+                }
+                is Resource.Loading -> {
+                }
+            }
+
+        })
+
+        viewModel.jobStoryLiveData.observe(this, Observer { resourceResponse ->
+            when (resourceResponse) {
+
+                is Resource.Success -> {
+                    resourceResponse.data?.let {
+                    }
+                }
+
+                is Resource.Error -> {
+                    resourceResponse.message?.let { message ->
+                    }
+                }
+                is Resource.Loading -> {
                 }
             }
         })
     }
-
-
 }

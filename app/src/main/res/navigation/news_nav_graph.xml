@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/news_nav_graph"
+    app:startDestination="@id/topNewsFragment">
+
+    <fragment
+        android:id="@+id/topNewsFragment"
+        android:name="com.androideveloper.thenewsapp.ui.fragments.TopNewsFragment"
+        android:label="TopNewsFragment">
+        <action
+            android:id="@+id/action_topNewsFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/latestNewsFragment"
+        android:name="com.androideveloper.thenewsapp.ui.fragments.LatestNewsFragment"
+        android:label="LatestNewsFragment">
+        <action
+            android:id="@+id/action_latestNewsFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/jobNewsFragment"
+        android:name="com.androideveloper.thenewsapp.ui.fragments.JobNewsFragment"
+        android:label="JobNewsFragment">
+        <action
+            android:id="@+id/action_jobNewsFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedNewsFragment"
+        android:name="com.androideveloper.thenewsapp.ui.fragments.SavedNewsFragment"
+        android:label="SavedNewsFragment">
+        <action
+            android:id="@+id/action_savedNewsFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.androideveloper.hackernewsfeed.play.ui.fragments.ArticleFragment"
+        android:label="ArticleFragment" />
+</navigation>
