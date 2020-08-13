@@ -3,6 +3,7 @@ package com.androideveloper.thenewsapp.ui.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -38,7 +39,7 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news) {
             )
         }
 
-        latestHackerFeedAdapter.setOnImageClickListener {
+        hackerFeedAdapter.setOnImageClickListener {
             //todo also save id and isenabled (if true) to db, everytime app starts, check in db for true and update flags accrdingly
             if (it?.isImageSaved!!) {
                 viewModel.saveStory(it)
