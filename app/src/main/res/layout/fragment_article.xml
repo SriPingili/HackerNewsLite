@@ -5,20 +5,18 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
-    <!--TODO move all dimensions to dimens.xml-->
-
     <WebView
         android:id="@+id/webView"
-        android:background="@color/backgroundColor"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
         android:src="@drawable/ic_baseline_share_24"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"

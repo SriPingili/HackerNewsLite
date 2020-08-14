@@ -1,6 +1,5 @@
 package com.android.hackernewslite.play.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.webkit.CookieManager
@@ -11,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
+import com.android.hackernewslite.play.util.AppUtil
 import kotlinx.android.synthetic.main.fragment_article.*
 
 /*
@@ -37,10 +37,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article) {
         }
 
         fab.setOnClickListener {
-            val sharingIntent = Intent(Intent.ACTION_SEND)
-            sharingIntent.type = "text/plain"
-            sharingIntent.putExtra(Intent.EXTRA_TEXT, article.url)
-            startActivity(Intent.createChooser(sharingIntent, "Share Via"))
+            AppUtil.startShareIntent(article.url!!, context!!)
         }
     }
 }

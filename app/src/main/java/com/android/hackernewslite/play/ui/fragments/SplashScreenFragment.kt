@@ -22,7 +22,7 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
         handler.postDelayed({
             val bundle = Bundle().apply {
                 putBoolean(
-                    "isFromSplashScreen",
+                    Constants.IS_FROM_SPLASH_SCREEN,
                     true
                 )//this needs to be same as in news_nav_graph.xml
             }

@@ -26,6 +26,7 @@ import com.android.hackernewslite.play.extensions.initialize
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
+import com.android.hackernewslite.play.util.Constants
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY
 import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.IN_PROGRESS
@@ -47,7 +48,7 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
     lateinit var customTabsUtil: CustomTabsUtil
-    val TAG = "LatestNewsFragment"
+    val TAG = LatestNewsFragment::class.java.simpleName
     var apiCallStatus = COMPLETED_SUCCESSFULLY
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,7 +62,8 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
         hackerFeedAdapter.setOnItemClickListener {
 
             if (it.url.isNullOrBlank()) {
-                Toast.makeText(context, "Cannot open this page", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.cannot_open_page), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnItemClickListener
             }
 
@@ -71,7 +73,7 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
             } else {
                 val bundle = Bundle().apply {
                     putSerializable(
-                        "article_arg",
+                        Constants.ARTICLE_ARG,
                         it
                     )//this needs to be same as in news_nav_graph.xml
                 }
@@ -104,7 +106,7 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
                         apiCallStatus = COMPLETED_SUCCESSFULLY
                         swipeRefresh?.isRefreshing = false
                         resourceResponse.message?.let { message ->
-                            Log.v(TAG, "An error occured: $message")
+                            Log.v(TAG, String.format(Constants.ERROR_MESSAGE, message))
                         }
                     }
 
@@ -124,7 +126,7 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
 
                 is Resource.Error -> {
                     resourceResponse.message?.let { message ->
-                        Log.v(TAG, "An error occured: $message")
+                        Log.v(TAG, String.format(Constants.ERROR_MESSAGE, message))
                     }
                 }
 
@@ -197,7 +199,9 @@ class LatestNewsFragment : Fragment(R.layout.fragment_latest_news), SearchView.O
         if (apiCallStatus.equals(COMPLETED_SUCCESSFULLY)) {
             viewModel.getNewStories()
             apiCallStatus = IN_PROGRESS
-            view?.let { Snackbar.make(it, "Syncing...", Snackbar.LENGTH_SHORT).show() }
+            view?.let {
+                Snackbar.make(it, getString(R.string.syncing), Snackbar.LENGTH_SHORT).show()
+            }
             val handler = Handler()
             handler.postDelayed({ //hide the loading screen after 2 secs
                 swipeRefresh?.isRefreshing = false

@@ -26,6 +26,7 @@ import com.android.hackernewslite.play.adapter.HackerFeedAdapter
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
+import com.android.hackernewslite.play.util.Constants
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.CustomTabsUtil
 import com.android.hackernewslite.play.util.SharePreferenceUtil
@@ -52,7 +53,8 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
 
         hackerFeedAdapter.setOnItemClickListener {
             if (it.url.isNullOrBlank()) {
-                Toast.makeText(context, "Cannot open this page", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.cannot_open_page), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnItemClickListener
             }
 
@@ -62,7 +64,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
             } else {
                 val bundle = Bundle().apply {
                     putSerializable(
-                        "article_arg",
+                        Constants.ARTICLE_ARG,
                         it
                     ) //this needs to be same as in news_nav_graph.xml
                 }
@@ -113,13 +115,14 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news), SearchView.OnQ
 
                 viewModel.deleteStory(hackerStory)
 
-                Snackbar.make(view, "Successfully deleted article", Snackbar.LENGTH_SHORT).apply {
-                    setAction("UNDO", View.OnClickListener {
-                        viewModel.saveStory(hackerStory)
-                    })//todo implement this, simple
+                Snackbar.make(view, getString(R.string.delete_success), Snackbar.LENGTH_SHORT)
+                    .apply {
+                        setAction(getString(R.string.undo)) {
+                            viewModel.saveStory(hackerStory)
+                        }//todo implement this, simple
 
-                    show()
-                }
+                        show()
+                    }
             }
         }
 

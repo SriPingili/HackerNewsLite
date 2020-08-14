@@ -28,6 +28,7 @@ import com.android.hackernewslite.play.extensions.initialize
 import com.android.hackernewslite.play.ui.HackerFeedActivity
 import com.android.hackernewslite.play.ui.SettingsActivity
 import com.android.hackernewslite.play.ui.viewmodel.HackerFeedViewModel
+import com.android.hackernewslite.play.util.Constants
 import com.android.hackernewslite.play.util.Constants.Companion.AppFlow
 import com.android.hackernewslite.play.util.Constants.Companion.QUERY_SIZE_LIMIT
 import com.android.hackernewslite.play.util.Constants.Companion.ResponseCall.COMPLETED_SUCCESSFULLY
@@ -53,7 +54,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
     lateinit var appFlow: AppFlow
     var apiCallStatus = COMPLETED_SUCCESSFULLY
     var result = false
-    val TAG = "TopNewsFragment"
+    val TAG = TopNewsFragment::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +77,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         }
 
         if (result) {
-            Snackbar.make(view, "Syncing...", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(view, getString(R.string.syncing), Snackbar.LENGTH_LONG).show()
         }
 
         setHasOptionsMenu(true)
@@ -97,7 +98,8 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
         hackerFeedAdapter.setOnItemClickListener {
             if (it.url.isNullOrBlank()) {
-                Toast.makeText(context, "Cannot open this page", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.cannot_open_page), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnItemClickListener
             }
 
@@ -107,7 +109,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
             } else {
                 val bundle = Bundle().apply {
                     putSerializable(
-                        "article_arg",
+                        Constants.ARTICLE_ARG,
                         it
                     )//this needs to be same as in news_nav_graph.xml
                 }
@@ -121,7 +123,8 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
         hackerFeedAdapter.setOnImageClickListener {
             if (it?.isImageSaved!!) {
-                Toast.makeText(context, "Story saved successfully.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.story_save_success), Toast.LENGTH_SHORT)
+                    .show()
                 viewModel.saveStory(it)
             } else {
                 viewModel.deleteStory(it)
@@ -141,7 +144,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
                         apiCallStatus = COMPLETED_SUCCESSFULLY
                         swipeRefresh?.isRefreshing = false
                         resourceResponse.message?.let { message ->
-                            Log.v(TAG, "An error occured: $message")
+                            Log.v(TAG, String.format(Constants.ERROR_MESSAGE, message))
                         }
                     }
 
@@ -173,7 +176,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
                 is Resource.Error -> {
                     resourceResponse.message?.let { message ->
-                        Log.v(TAG, "An error occured: $message")
+                        Log.v(TAG, String.format(Constants.ERROR_MESSAGE, message))
                     }
                 }
 
@@ -250,7 +253,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         if (apiCallStatus.equals(COMPLETED_SUCCESSFULLY)) {
             viewModel.getTopStores()
             apiCallStatus = IN_PROGRESS
-            Snackbar.make(view!!, "Syncing...", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(view!!, getString(R.string.syncing), Snackbar.LENGTH_LONG).show()
             val handler = Handler()
             handler.postDelayed({
                 swipeRefresh?.isRefreshing = false

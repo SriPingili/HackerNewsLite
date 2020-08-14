@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.android.hackernewslite.play.R;
 import com.android.hackernewslite.play.util.Constants;
 
 import java.util.Properties;
@@ -17,6 +18,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/*
+* Class to send email
+* Source: A youtube video
+* */
 public class SendMail extends AsyncTask<Void, Void, Void> {
     //Variables
     private Context mContext;
@@ -31,8 +36,8 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
     //Constructor
     public SendMail(Context mContext, String mMessage) {
         this.mContext = mContext;
-        this.mEmail = "srijith.pingili@gmail.com";
-        this.mSubject = "Feedback from HackerNewsLite"; //todo strings.xml
+        this.mEmail = Constants.TO_EMAIL;
+        this.mSubject = mContext.getString(R.string.feedback_subject);
         this.mMessage = mMessage;
     }
 
@@ -40,7 +45,7 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
         //Show progress dialog while sending email
-        mProgressDialog = ProgressDialog.show(mContext, "Sending feedback", "Please wait...", false, false);//todo strings.xml
+        mProgressDialog = ProgressDialog.show(mContext, mContext.getString(R.string.sending_feedback), mContext.getString(R.string.please_wait), false, false);
     }
 
     @Override
@@ -50,7 +55,7 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
         mProgressDialog.dismiss();
 
         //Show success toast
-        Toast.makeText(mContext, "Feedback Sent Successfully", Toast.LENGTH_SHORT).show();//todo strings.xml
+        Toast.makeText(mContext, R.string.feeback_send_success, Toast.LENGTH_SHORT).show();//todo strings.xml
     }
 
     @Override
@@ -71,7 +76,7 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
                 new javax.mail.Authenticator() {
                     //Authenticating the password
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(Constants.EMAIL, Constants.PASSWORD);
+                        return new PasswordAuthentication(Constants.FROM_EMAIL, Constants.PASSWORD);
                     }
                 });
 
@@ -80,7 +85,7 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
             MimeMessage mm = new MimeMessage(mSession);
 
             //Setting sender address
-            mm.setFrom(new InternetAddress(Constants.EMAIL));
+            mm.setFrom(new InternetAddress(Constants.FROM_EMAIL));
             //Adding receiver
             mm.addRecipient(Message.RecipientType.TO, new InternetAddress(mEmail));
             //Adding subject

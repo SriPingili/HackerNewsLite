@@ -14,5 +14,54 @@
     <!-- format string for long form dates and times, such as "4/05/2018 1:54 PM" for April 5, 2018 at 1:54 PM -->
     <string name="long_with_time_date_format">M/dd/yyyy h:mm a</string>
     <string name="yesterday">Yesterday</string>
+
+    <!--menu-->
+    <string name="menu_search">Search</string>
     <string name="settings">Settings</string>
+
+    <!--bottom nav-->
+    <string name="top_news">Top Stories</string>
+    <string name="latest_news">Latest Stories</string>
+    <string name="job_news">Job Stories</string>
+    <string name="saved_news">Saved Stories</string>
+
+    <!--settings strings-->
+    <string name="app_share_url">Hey check out my app at: https://play.google.com/store/apps/details?id=</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="license_agreement">License Agreement</string>
+    <string name="display">Display</string>
+    <string name="use_custom_tabs">Use Chrome Tabs</string>
+    <string name="open_in_chrome">Open links in Chrome tabs instead of the default browser</string>
+    <string name="help">Help</string>
+    <string name="rate_the_app">Rate the app</string>
+    <string name="play_store_url">https://play.google.com/store/apps/details?id=%s</string>
+    <string name="market_url">market://details?id=%s</string>
+    <string name="share_app">Share the app</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="feedback_summary">Report technical issues or suggest new features</string>
+
+    <!--Top NewsFragment-->
+    <string name="syncing">Syncing...</string>
+    <string name="cannot_open_page">Cannot open this page</string>
+    <string name="story_save_success">Story saved successfully.</string>
+
+    <!--saved news fragment-->
+    <string name="delete_success">Successfully deleted article</string>
+    <string name="undo">UNDO</string>
+
+    <!--Email-->
+    <string name="feedback_subject">Feedback from HackerNewsLite</string>
+    <string name="sending_feedback">Sending feedback</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="feeback_send_success">Feedback sent successfully.</string>
+
+    <!--saved news fragment-->
+    <string name="no_results_message">Save an article from your app to see it listed here.</string>
+
+    <!--Feedback fragment-->
+    <string name="submit_feedback">Submit Feedback</string>
+    <string name="start_typing">Please start typing here to submit your feedback.</string>
+    <string name="send">Send</string>
+
 </resources>

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.extensions.relativeDateFormat
 import com.android.hackernewslite.play.model.HackerStory
+import com.android.hackernewslite.play.util.Constants
 import com.android.hackernewslite.play.util.SharePreferenceUtil
 import kotlinx.android.synthetic.main.item_article_preview.view.*
 import java.net.URL
@@ -23,7 +24,7 @@ Adapter class for the recycler view
 class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHolder>() {
     private var onItemClickListener: ((HackerStory) -> Unit)? = null
     private var onSaveImageClickListener: ((HackerStory) -> Unit)? = null
-    val TAG = "HackerFeedAdapter"
+    val TAG = HackerFeedAdapter::class.java.simpleName
     var fullList: MutableList<HackerStory> = mutableListOf()
 
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -64,7 +65,7 @@ class HackerFeedAdapter : RecyclerView.Adapter<HackerFeedAdapter.ArticleViewHold
             try {
                 url = URL(url).host
             } catch (e: Exception) {
-                Log.v(TAG, "An error occured: ${e.message}")
+                Log.v(TAG, String.format(Constants.ERROR_MESSAGE, e.message))
             }
             urlTextViewId.text = url
             authorTextViewId.text = "by ${article.by}"

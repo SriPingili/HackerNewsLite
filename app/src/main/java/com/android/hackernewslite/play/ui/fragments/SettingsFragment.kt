@@ -2,7 +2,6 @@ package com.android.hackernewslite.play.ui.fragments
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +14,8 @@ import androidx.preference.SwitchPreference
 import com.android.hackernewslite.play.BuildConfig
 import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.ui.LicenseActivity
+import com.android.hackernewslite.play.util.AppUtil
+import com.android.hackernewslite.play.util.Constants
 import com.android.hackernewslite.play.util.SharePreferenceUtil
 
 /*
@@ -40,21 +41,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         //About
         val aboutCategory = PreferenceCategory(context)
-        aboutCategory.key = "about_category"
-        aboutCategory.title = "About"
+        aboutCategory.key = Constants.ABOUT_CATEGORY
+        aboutCategory.title = getString(R.string.about)
         aboutCategory.isIconSpaceReserved = false
 
         //Version
         val versionPreference = Preference(context)
-        versionPreference.key = "app_version"
-        versionPreference.title = "Version"
+        versionPreference.key = Constants.APP_VERSION
+        versionPreference.title = getString(R.string.version)
         versionPreference.summary = BuildConfig.VERSION_NAME
         versionPreference.isIconSpaceReserved = false
 
         //License Agreement
         val licensePreference = Preference(context)
-        licensePreference.key = "app_license"
-        licensePreference.title = "License Agreement"
+        licensePreference.key = Constants.APP_LICENSE
+        licensePreference.title = getString(R.string.license_agreement)
         licensePreference.isIconSpaceReserved = false
         licensePreference.setOnPreferenceClickListener {
             startActivity(Intent(context, LicenseActivity::class.java))
@@ -67,17 +68,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         //display
         val displayCategory = PreferenceCategory(context)
-        displayCategory.key = "display_category"
-        displayCategory.title = "Display"
+        displayCategory.key = Constants.DISPLAY_CATEGORY
+        displayCategory.title = getString(R.string.display)
         displayCategory.isIconSpaceReserved = false
         screen.addPreference(displayCategory)
 
 
         //use custom tabs
         val customTabPreference = SwitchPreference(context)
-        customTabPreference.key = "custom_tab"
-        customTabPreference.title = "Use Chrome Tabs"
-        customTabPreference.summary = "Open links in Chrome tabs instead of default browser"
+        customTabPreference.key = Constants.CUSTOM_TAB
+        customTabPreference.title = getString(R.string.use_custom_tabs)
+        customTabPreference.summary = getString(R.string.open_in_chrome)
         customTabPreference.isIconSpaceReserved = false
         customTabPreference.setDefaultValue(true)
         customTabPreference.onPreferenceChangeListener =
@@ -92,30 +93,26 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         //Help
         val helpCategory = PreferenceCategory(context)
-        helpCategory.key = "help"
-        helpCategory.title = "Help"
+        helpCategory.key = Constants.HELP_CATEGORY
+        helpCategory.title = getString(R.string.help)
         screen.addPreference(helpCategory)
         helpCategory.isIconSpaceReserved = false
 
         //Rate  the app
         val reviewPreference = Preference(context)
-        reviewPreference.key = "review"
-        reviewPreference.title = "Rate the app"
+        reviewPreference.key = Constants.REVIEW
+        reviewPreference.title = getString(R.string.rate_the_app)
         reviewPreference.isIconSpaceReserved = false
         reviewPreference.setOnPreferenceClickListener {
             try {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")
-                    )
+                AppUtil.startPlayStoreIntent(
+                    String.format(getString(R.string.market_url), BuildConfig.APPLICATION_ID),
+                    context
                 )
             } catch (anfe: ActivityNotFoundException) {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}")
-                    )
+                AppUtil.startPlayStoreIntent(
+                    String.format(getString(R.string.play_store_url), BuildConfig.APPLICATION_ID),
+                    context
                 )
             }
 
@@ -124,31 +121,27 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         //Share the app
         val sharePreference = Preference(context)
-        sharePreference.key = "share"
-        sharePreference.title = "Share the app"
+        sharePreference.key = Constants.SHARE
+        sharePreference.title = getString(R.string.share_app)
         sharePreference.isIconSpaceReserved = false
         sharePreference.setOnPreferenceClickListener {
-            val sendIntent = Intent()
-            sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                "Hey check out my app at: https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID //todo strings.xml
+            AppUtil.startShareIntent(
+                getString(R.string.app_share_url) + BuildConfig.APPLICATION_ID,
+                context
             )
-            sendIntent.type = "text/plain"
-            startActivity(sendIntent)
             true
         }
 
         //Submit Feedback
         val feedbackPreference = Preference(context) //todo strings.xml
-        feedbackPreference.key = "feedback"
-        feedbackPreference.title = "Send feedback"
-        feedbackPreference.summary = "Report technical issues or suggest new features"
+        feedbackPreference.key = Constants.FEEDBACK
+        feedbackPreference.title = getString(R.string.send_feedback)
+        feedbackPreference.summary = getString(R.string.feedback_summary)
         feedbackPreference.isIconSpaceReserved = false
         feedbackPreference.setOnPreferenceClickListener {
             val fm: FragmentManager? = activity?.supportFragmentManager
             if (fm != null) {
-                FeedbackFragment().show(fm, "fragment_submit_feedback")
+                FeedbackFragment().show(fm, Constants.FRAGMENT_TAG)
             }
 
             true

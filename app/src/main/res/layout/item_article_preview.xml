@@ -3,11 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="@dimen/item_height"
     android:background="@color/backgroundColor"
     android:padding="8dp">
-
-    <!--TODO move all dimensions to dimens.xml-->
 
     <TextView
         android:id="@+id/scoreTextViewId"
