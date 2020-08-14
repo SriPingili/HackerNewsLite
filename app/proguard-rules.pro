@@ -19,3 +19,18 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class okhttp3.* {*;}
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+-keep class retrofit2.* { *; }
+-dontwarn retrofit2.**
+
+-keep class com.android.hackernewslite.play.model.HackerStory { *; }
+
+-keep class androidx.appcompat.widget.SearchView { *; }
+
+# Most of volatile fields are updated with AFU and should not be mangled
+-keepclassmembernames class kotlinx.* {
+    volatile <fields>;
+}

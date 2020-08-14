@@ -37,6 +37,7 @@
     <TextView
         android:id="@+id/urlTextViewId"
         android:layout_width="0dp"
+        android:textStyle="italic"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:lines="1"
