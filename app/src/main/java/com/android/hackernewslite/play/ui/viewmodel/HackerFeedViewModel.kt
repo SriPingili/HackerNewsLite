@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.hackernewslite.play.model.HackerStory
 import com.android.hackernewslite.play.repository.HackerFeedRepository
+import com.android.hackernewslite.play.util.Constants.Companion.HACKER_FEED_RESPONSE_SIZE
+import com.android.hackernewslite.play.util.Constants.Companion.HACKER_FEED_TOP_STORY_RESPONSE_SIZE
 import com.android.hackernewslite.play.util.Constants.Companion.HOT_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.JOB_STORY_TYPE
 import com.android.hackernewslite.play.util.Constants.Companion.NEW_STORY_TYPE
@@ -55,7 +57,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
                 responseCounter = 0
                 topStoryResponse.clear()
 
-                val newResponse = hackerFeedResponse.take(250)
+                val newResponse = hackerFeedResponse.take(HACKER_FEED_TOP_STORY_RESPONSE_SIZE)
                 initialTopResponseSize = newResponse.size
 
                 for (id in newResponse) {
@@ -105,7 +107,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleNewStoriesResponse(response: Response<List<Int>>): Resource<List<Int>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
-                val newResponse = hackerFeedResponse.take(250)
+                val newResponse = hackerFeedResponse.take(HACKER_FEED_RESPONSE_SIZE)
 
                 for (id in newResponse) {
                     fetchNewStoryById(id)
@@ -153,7 +155,7 @@ class HackerFeedViewModel(val hackerFeedRepository: HackerFeedRepository) : View
     private fun handleJobStoriesResponse(response: Response<List<Int>>): Resource<List<Int>> {
         if (response.isSuccessful) {
             response.body()?.let { hackerFeedResponse ->
-                val newResponse = hackerFeedResponse.take(250)
+                val newResponse = hackerFeedResponse.take(HACKER_FEED_RESPONSE_SIZE)
 
                 for (id in newResponse) {
                     fetchJobStoryById(id)
