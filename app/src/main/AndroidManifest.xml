@@ -11,14 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.LicenseActivity"
-            android:parentActivityName=".ui.SettingsActivity"
-            android:label="License"></activity>
+        <activity android:name=".ui.PrivacyPolicyActivity"
+            android:label="Privacy Policy"
+            android:parentActivityName=".ui.SettingsActivity"/>
+        <activity
+            android:name=".ui.LicenseActivity"
+            android:label="License"
+            android:parentActivityName=".ui.SettingsActivity" />
         <activity
             android:name=".ui.SettingsActivity"
-            android:launchMode="singleTop"
             android:label="@string/settings"
-            android:parentActivityName=".ui.HackerFeedActivity"></activity>
+            android:launchMode="singleTop"
+            android:parentActivityName=".ui.HackerFeedActivity" />
         <activity
             android:name=".ui.HackerFeedActivity"
             android:launchMode="singleTop"

@@ -14,6 +14,7 @@ import androidx.preference.SwitchPreference
 import com.android.hackernewslite.play.BuildConfig
 import com.android.hackernewslite.play.R
 import com.android.hackernewslite.play.ui.LicenseActivity
+import com.android.hackernewslite.play.ui.PrivacyPolicyActivity
 import com.android.hackernewslite.play.util.AppUtil
 import com.android.hackernewslite.play.util.Constants
 import com.android.hackernewslite.play.util.SharePreferenceUtil
@@ -62,9 +63,20 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
+        //Privacy Policy
+        val privacyPolicyPreference = Preference(context)
+        privacyPolicyPreference.key = Constants.APP_PRIVACY_POLICY
+        privacyPolicyPreference.title = getString(R.string.privacy_policy_agreement)
+        privacyPolicyPreference.isIconSpaceReserved = false
+        privacyPolicyPreference.setOnPreferenceClickListener {
+            startActivity(Intent(context, PrivacyPolicyActivity::class.java))
+            true
+        }
+
         screen.addPreference(aboutCategory)
         aboutCategory.addPreference(versionPreference)
         aboutCategory.addPreference(licensePreference)
+        aboutCategory.addPreference(privacyPolicyPreference)
 
         //display
         val displayCategory = PreferenceCategory(context)

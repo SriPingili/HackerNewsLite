@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="privacy_policy"><![CDATA[
+\n\nPERSONAL INFORMATION.
+\n\nThis app is made in consideration with your privacy in mind, so the publisher of this app do not collect any personally identifiable information about you.
+\n\nIn other words, the publisher of this app do not collect information such as your name, address, phone number, email address or precise geographic location.
+
+
+\n\n\nNO WARRANTY.
+\n\nAll articles in the app are displayed "as is", provided by Hacker News, and not owned by the publisher of this app.
+\n\nThese articles are displayed to you without warranties or conditions of any kind from the publisher of this app, whether oral or written, express or implied.
+
+    ]]></string>
+</resources>
