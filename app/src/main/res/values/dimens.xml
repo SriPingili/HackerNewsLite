@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bottom_nav_height">56dp</dimen>
+    <dimen name="settings_margin">10dp</dimen>
+    <dimen name="fab_margin">32dp</dimen>
+    <dimen name="padding_bottom">50dp</dimen>
+    <dimen name="item_height">100dp</dimen>
+    <dimen name="circle_dimen">60dp</dimen>
+    <fraction name="horizontal_bias">0.5</fraction>
+
+
+    <!--animation values-->
+    <integer name="slide_in_right_duration">300</integer>
+    <integer name="slide_in_left_duration">300</integer>
+    <fraction name="slide_in_right_from_x">-100%</fraction>
+    <fraction name="slide_in_right_to_x">0%</fraction>
+    <fraction name="slide_in_left_from_x">100%</fraction>
+    <fraction name="slide_in_left_to_x">0%</fraction>
+    <integer name="slide_out_left_duration">400</integer>//
+    <integer name="slide_out_right_duration">300</integer>
+    <fraction name="slide_out_left_from_x">0%</fraction>
+    <fraction name="slide_out_left_to_x">100%</fraction>
+    <fraction name="slide_out_right_from_x">0%</fraction>
+    <fraction name="slide_out_right_to_x">-100%</fraction>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    <PreferenceCategory android:title="General">-->
+<!--        <EditTextPreference-->
+<!--            android:defaultValue="default_gallery_storage"-->
+<!--            android:key="key_gallery_name"-->
+<!--            android:summary="default_gallery_storage"-->
+<!--            android:title="title_gallery_storage" />-->
+
+<!--        <CheckBoxPreference-->
+<!--            android:defaultValue="true"-->
+<!--            android:key="key_upload_over_wifi"-->
+<!--            android:summary="summary_upload_over_wifi"-->
+<!--            android:title="title_auto_upload" />-->
+
+
+<!--    </PreferenceCategory>-->
+
+<!--    <PreferenceCategory android:title="pref_title_notifications">-->
+
+<!--        <SwitchPreference-->
+<!--            android:defaultValue="true"-->
+<!--            android:key="notifications_new_message"-->
+<!--            android:title="title_new_notification_sound" />-->
+
+
+<!--        <SwitchPreference-->
+<!--            android:defaultValue="true"-->
+<!--            android:key="key_vibrate"-->
+<!--            android:summary="summary_vibrate"-->
+<!--            android:title="title_vibrate" />-->
+<!--    </PreferenceCategory>-->
+
+</PreferenceScreen>

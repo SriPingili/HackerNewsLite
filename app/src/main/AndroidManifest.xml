@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.androideveloper.hackernewsfeed.play">
+    package="com.android.hackernewslite.play">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.HackerFeedActivity">
+        <activity android:name=".ui.LicenseActivity"
+            android:parentActivityName=".ui.SettingsActivity"
+            android:label="License"></activity>
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:launchMode="singleTop"
+            android:label="@string/settings"
+            android:parentActivityName=".ui.HackerFeedActivity"></activity>
+        <activity
+            android:name=".ui.HackerFeedActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

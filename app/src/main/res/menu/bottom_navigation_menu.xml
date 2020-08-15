@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/topNewsFragment"
+        android:icon="@drawable/ic_baseline_hot_24"
+        android:title="@string/top_news" />
+
+    <item
+        android:id="@+id/latestNewsFragment"
+        android:icon="@drawable/ic_baseline_new_24"
+        android:title="@string/latest_news" />
+
+    <item
+        android:id="@+id/jobNewsFragment"
+        android:icon="@drawable/ic_baseline_job_24"
+        android:title="@string/job_news" />
+
+    <item
+        android:id="@+id/savedNewsFragment"
+        android:icon="@drawable/ic_baseline_save_24"
+        android:title="@string/saved_news" />
+
+</menu>
