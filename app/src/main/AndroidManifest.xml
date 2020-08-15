@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.hackernewslite.play">
+    package="sp.android.hackernewslite.play">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,9 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.PrivacyPolicyActivity"
+        <activity
+            android:name=".ui.PrivacyPolicyActivity"
             android:label="Privacy Policy"
-            android:parentActivityName=".ui.SettingsActivity"/>
+            android:parentActivityName=".ui.SettingsActivity" />
         <activity
             android:name=".ui.LicenseActivity"
             android:label="License"

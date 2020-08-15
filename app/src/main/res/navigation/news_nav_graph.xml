@@ -4,7 +4,7 @@
     app:startDestination="@id/splashScreenFragment">
     <fragment
         android:id="@+id/topNewsFragment"
-        android:name="com.android.hackernewslite.play.ui.fragments.TopNewsFragment"
+        android:name="sp.android.hackernewslite.play.ui.fragments.TopNewsFragment"
         android:label="TopNewsFragment">
         <action
             android:id="@+id/action_topNewsFragment_to_articleFragment"
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/latestNewsFragment"
-        android:name="com.android.hackernewslite.play.ui.fragments.LatestNewsFragment"
+        android:name="sp.android.hackernewslite.play.ui.fragments.LatestNewsFragment"
         android:label="LatestNewsFragment">
         <action
             android:id="@+id/action_latestNewsFragment_to_articleFragment"
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/jobNewsFragment"
-        android:name="com.android.hackernewslite.play.ui.fragments.JobNewsFragment"
+        android:name="sp.android.hackernewslite.play.ui.fragments.JobNewsFragment"
         android:label="JobNewsFragment">
         <action
             android:id="@+id/action_jobNewsFragment_to_articleFragment"
@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
-        android:name="com.android.hackernewslite.play.ui.fragments.SavedNewsFragment"
+        android:name="sp.android.hackernewslite.play.ui.fragments.SavedNewsFragment"
         android:label="SavedNewsFragment">
         <action
             android:id="@+id/action_savedNewsFragment_to_articleFragment"
@@ -56,11 +56,11 @@
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
-        android:name="com.android.hackernewslite.play.ui.fragments.ArticleFragment"
+        android:name="sp.android.hackernewslite.play.ui.fragments.ArticleFragment"
         android:label="ArticleFragment">
         <argument
             android:name="article_arg"
-            app:argType="com.android.hackernewslite.play.model.HackerStory" />
+            app:argType="sp.android.hackernewslite.play.model.HackerStory" />
     </fragment>
 
     <!--
@@ -82,7 +82,7 @@
 
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.android.hackernewslite.play.ui.fragments.SplashScreenFragment"
+        android:name="sp.android.hackernewslite.play.ui.fragments.SplashScreenFragment"
         android:label="SplashScreenFragment" >
         <action
             android:id="@+id/action_splashScreenFragment_to_topNewsFragment"

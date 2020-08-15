@@ -9,7 +9,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.android.hackernewslite.play"
+        applicationId "sp.android.hackernewslite.play"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
     implementation "com.squareup.okhttp3:logging-interceptor:4.5.0"
 
-//    // Navigation Components
+    // Navigation Components
     implementation "androidx.navigation:navigation-fragment-ktx:2.2.1"
     implementation "androidx.navigation:navigation-ui-ktx:2.2.1"
 

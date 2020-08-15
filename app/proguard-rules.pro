@@ -26,7 +26,7 @@
 -keep class retrofit2.* { *; }
 -dontwarn retrofit2.**
 
--keep class com.android.hackernewslite.play.model.HackerStory { *; }
+-keep class sp.android.hackernewslite.play.model.HackerStory { *; }
 
 -keep class androidx.appcompat.widget.SearchView { *; }
 
