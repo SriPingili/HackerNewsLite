@@ -30,6 +30,7 @@
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="license_agreement">License Agreement</string>
+    <string name="privacy_policy_agreement">Privacy Policy</string>
     <string name="display">Display</string>
     <string name="use_custom_tabs">Use Chrome Tabs</string>
     <string name="open_in_chrome">Open links in Chrome tabs instead of the default browser</string>

@@ -50,5 +50,6 @@ class Constants {
         const val SHARE = "share"
         const val FEEDBACK = "feedback"
         const val FRAGMENT_TAG = "fragment_submit_feedback"
+        const val APP_PRIVACY_POLICY = "privacy_policy"
     }
 }
