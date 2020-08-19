@@ -27,6 +27,27 @@
 -dontwarn retrofit2.**
 
 -keep class sp.android.hackernewslite.play.model.HackerStory { *; }
+-keep class sp.android.hackernewslite.play.email.SendMail { *; }
+-keep class sp.android.hackernewslite.play.ui.fragments.FeedbackFragment {*;}
+
+#https://stackoverflow.com/questions/5434699/android-javamail-and-proguard
+-dontwarn java.awt.**
+-dontwarn java.beans.Beans
+-dontwarn javax.security.**
+
+-keep class javamail.* {*;}
+-keep class javax.mail.* {*;}
+-keep class javax.activation.* {*;}
+
+-keep class com.sun.mail.dsn.* {*;}
+-keep class com.sun.mail.handlers.* {*;}
+-keep class com.sun.mail.smtp.* {*;}
+-keep class com.sun.mail.util.* {*;}
+-keep class mailcap.* {*;}
+-keep class mimetypes.* {*;}
+-keep class myjava.awt.datatransfer.* {*;}
+-keep class org.apache.harmony.awt.* {*;}
+-keep class org.apache.harmony.misc.* {*;}
 
 -keep class androidx.appcompat.widget.SearchView { *; }
 
