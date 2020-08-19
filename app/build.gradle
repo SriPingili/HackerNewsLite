@@ -12,8 +12,8 @@ android {
         applicationId "sp.android.hackernewslite.play"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 2
-        versionName "1.0.1"
+        versionCode Integer.parseInt(VERSION_CODE)
+        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
