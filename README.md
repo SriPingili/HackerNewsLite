@@ -20,11 +20,12 @@ Features:
 - AndroidX
 
 ### Screenshots
-<img src="assets/screenshot-1.png" width="200px" />
+<img src="assets/Screenshot-1.png" width="200px" />
 <img src="assets/Screenshot-2.png" width="200px" />
-<img src="../assets/Screenshot-3.png" width="200px" />
-<img src="/assets/Screenshot-4.png" width="200px" />
-![sample image](../assets/Screenshot-4.png)
+<img src="assets/Screenshot-3.png" width="200px" />
+<img src="assets/Screenshot-4.png" width="200px" />
+<img src="assets/Screenshot-5.png" width="200px" />
+<img src="assets/Screenshot-6.png" width="200px" />
 
 ### License
 
