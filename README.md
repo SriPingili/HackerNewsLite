@@ -1,4 +1,3 @@
-## Hacker News Lite
 
 Hacker News Lite is a Material design [Hacker News] client for Android which uses the official [HackerNews/API].This is a light weight app to consolidate all the happenings from hacker news in one place. Ability to save the news you like is the cherry on the cake.
 
