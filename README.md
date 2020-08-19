@@ -3,11 +3,11 @@ Hacker News Lite is a Material design [Hacker News] client for Android which use
 
 Features:
 
-⋅⋅* Browse Top stories, Latest stories and Job stories from Hacker News
-⋅⋅* Search for specific stories from Hacker News
-⋅⋅* Share stories with your friends, colleagues or loved ones
-⋅⋅* Save stories for viewing them later.
-⋅⋅* Supports reading stories in external Chrome tabs
+* Browse Top stories, Latest stories and Job stories from Hacker News
+* Search for specific stories from Hacker News
+* Share stories with your friends, colleagues or loved ones
+* Save stories for viewing them later.
+* Supports reading stories in external Chrome tabs
 
 [![Get it on Google Play][Play Store Badge]][Play Store]
 
