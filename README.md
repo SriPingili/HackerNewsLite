@@ -21,7 +21,7 @@ Features:
 
 ### Screenshots
 <img src="assets/screenshot-1.png" width="200px" />
-<img src="/assets/screenshot-2.png" width="200px" />
+<img src="../assets/screenshot-2.png" width="200px" />
 <img src="/assets/screenshot-3.png" width="200px" />
 <img src="/assets/screenshot-4.png" width="200px" />
 
