@@ -58,6 +58,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as HackerFeedActivity).showBottomNavAndActionBar()
         result = args.isFromSplashScreen
     }
 
@@ -65,7 +66,6 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HackerFeedActivity).viewModel
         setUpRecyclerView()
-        (activity as HackerFeedActivity).showBottomNavAndActionBar()
         customTabsUtil = CustomTabsUtil(context!!)
         appFlow = AppFlow.FIRST_TIME
 
@@ -76,7 +76,7 @@ class TopNewsFragment : Fragment(R.layout.fragment_top_news), SearchView.OnQuery
             hackerFeedAdapter.submitList(savedResponse)
         }
 
-        if (result) {
+        else if (result) {
             Snackbar.make(view, getString(R.string.syncing), Snackbar.LENGTH_LONG).show()
         }
 

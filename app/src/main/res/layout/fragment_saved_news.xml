@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
+        android:padding="16dp"
         android:lines="2"
         android:text="@string/no_results_message"
         android:visibility="gone" />

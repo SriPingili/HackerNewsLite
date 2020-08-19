@@ -6,7 +6,7 @@
     <!-- format string for time-only display, such as "12:23" -->
     <string name="time_only_date_format" translatable="false">h:mm a</string>
     <!-- format string for day of the week abbreviation, such as "Mon" for Monday -->
-    <string name="day_of_week_date_format" translatable="false">E</string>
+    <string name="day_of_week_date_format" translatable="false">EEEE</string>
     <!-- format string for short form dates (within the current year), such as "Apr 5" for April 5 -->
     <string name="short_form_date_format">MMM d</string>
     <!-- format string for long form dates (not within current year), such as "4/05/2018" for April 5, 2018 -->
