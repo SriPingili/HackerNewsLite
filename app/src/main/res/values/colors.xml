@@ -6,5 +6,8 @@
 
     <color name="colorLight">#FFCC80</color>
     <color name="backgroundColor">#FFF3E0</color>
+
+    <color name="primaryText">#df000000</color>
+    <color name="secondaryText">#99000000</color>
     <!--FFE0B2-->
 </resources>
